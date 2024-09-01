@@ -1,11 +1,24 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Reflection.Emit;
+using GiftMailer.Data;
+using GiftMailer.UI;
 using HarmonyLib;
 
 namespace GiftMailer;
 
 internal static class MailboxPatches
 {
+    // Must be set in ModEntry
+    public static Func<ModConfig> ConfigSelector { get; set; } = null!;
+    public static Func<ModData> DataSelector { get; set; } = null!;
+    public static IMonitor Monitor { get; set; } = null!;
+
+    [SuppressMessage(
+        "Style",
+        "IDE0060:Remove unused parameter",
+        Justification = "Required by Harmony"
+    )]
     public static IEnumerable<CodeInstruction> MailboxTranspiler(
         IEnumerable<CodeInstruction> instructions,
         ILGenerator gen,
@@ -38,6 +51,15 @@ internal static class MailboxPatches
 
     private static bool MaybeShowGiftMailMenu()
     {
-        return false;
+        var config = ConfigSelector();
+        var data = DataSelector();
+        var farmerId = Game1.player.UniqueMultiplayerID;
+        if (!data.FarmerGiftMail.TryGetValue(farmerId, out var giftMailData))
+        {
+            giftMailData = new();
+            data.FarmerGiftMail.Add(farmerId, giftMailData);
+        }
+        Game1.activeClickableMenu = new GiftMailMenu(config, giftMailData, Game1.player, Monitor);
+        return true;
     }
 }
