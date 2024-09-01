@@ -8,6 +8,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <EnableHarmony>true</EnableHarmony>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +16,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CSharpier.MsBuild" Version="0.29.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
         <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1">
             <PrivateAssets>all</PrivateAssets>
@@ -24,11 +29,11 @@
     <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
 
     <ItemGroup>
-	  <Using Include="StardewValley" />
+    <Using Include="StardewValley" />
       <Using Include="StardewModdingAPI" />
       <Using Alias="Object" Include="System.Object" />
       <Using Alias="SObject" Include="StardewValley.Object" />
-	  <Using Alias="Rectangle" Include="Microsoft.Xna.Framework.Rectangle" />
-	  <Using Alias="Vector2" Include="Microsoft.Xna.Framework.Vector2" />
+    <Using Alias="Rectangle" Include="Microsoft.Xna.Framework.Rectangle" />
+    <Using Alias="Vector2" Include="Microsoft.Xna.Framework.Vector2" />
   </ItemGroup>
 </Project>

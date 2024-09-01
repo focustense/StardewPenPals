@@ -1,4 +1,6 @@
-﻿namespace GiftMailer;
+﻿using HarmonyLib;
+
+namespace GiftMailer;
 
 internal sealed class ModEntry : Mod
 {
@@ -9,5 +11,11 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         config = helper.ReadConfig<ModConfig>();
+
+        var harmony = new Harmony(ModManifest.UniqueID);
+        harmony.Patch(
+            AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+            transpiler: new(typeof(MailboxPatches), nameof(MailboxPatches.MailboxTranspiler))
+        );
     }
 }

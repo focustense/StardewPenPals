@@ -1,8 +1,6 @@
 ﻿namespace GiftMailer;
 
 /// <summary>
-/// Configuration settings for $safeprojectname$.
+/// Configuration settings for GiftMailer.
 /// </summary>
-public class ModConfig
-{
-}
+public class ModConfig { }
