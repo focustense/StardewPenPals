@@ -51,6 +51,10 @@ internal static class MailboxPatches
 
     private static bool MaybeShowGiftMailMenu()
     {
+        if (Game1.player.ActiveObject is null)
+        {
+            return false;
+        }
         var config = ConfigSelector();
         var data = DataSelector();
         var farmerId = Game1.player.UniqueMultiplayerID;

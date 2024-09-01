@@ -1,6 +1,6 @@
 ﻿using GiftMailer.Data;
-using Microsoft.Xna.Framework;
 using StardewUI;
+using StardewValley.Menus;
 
 namespace GiftMailer.UI;
 
@@ -64,29 +64,25 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
             Sprite = new(texture, sourceRect),
             VerticalAlignment = Alignment.End,
         };
-        int giftTaste = who.ActiveItem is not null
-            ? npc.getGiftTasteForThisItem(who.ActiveItem)
-            : -1;
+        var taste = GetGiftTasteInfo(npc, who.ActiveItem);
+        var tooltip = npc.displayName;
+        if (taste is not null)
+        {
+            tooltip += Environment.NewLine + "(" + taste.Description + ")";
+        }
         var panel = new Panel()
         {
             Name = $"{npc.Name}_Panel",
             Layout = LayoutParameters.Fill(),
             Margin = new(8, 8, 8, 5),
             VerticalContentAlignment = Alignment.End,
-            Tooltip = npc.displayName,
-            Tags = Tags.Create(npc.Name),
+            Tooltip = tooltip,
+            Tags = Tags.Create(npc),
             IsFocusable = true,
             Children = [portrait],
         };
-        var (giftTasteSprite, giftTasteTint) = giftTaste switch
-        {
-            0 => (Sprites.EmojiGrin, Color.Cyan),
-            2 => (Sprites.EmojiHappy, Color.White),
-            4 => (Sprites.EmojiUnhappy, Color.Orange),
-            6 => (Sprites.EmojiAngry, Color.Red),
-            _ => (null, Color.White),
-        };
-        if (giftTasteSprite is not null)
+        panel.Click += OnNpcClick;
+        if (taste is not null)
         {
             panel.Children.Add(
                 new Panel()
@@ -100,8 +96,8 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
                         new Image()
                         {
                             Layout = LayoutParameters.FixedSize(27, 27),
-                            Sprite = giftTasteSprite,
-                            Tint = giftTasteTint,
+                            Sprite = taste.Sprite,
+                            Tint = taste.Tint,
                         },
                     ],
                 }
@@ -124,20 +120,47 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
         var item = who.ActiveObject;
         var itemImage = new Image()
         {
+            Name = $"ItemImage_{item?.Name}",
             Layout = LayoutParameters.Fill(),
-            Margin = new(16),
             HorizontalAlignment = Alignment.Middle,
             VerticalAlignment = Alignment.Middle,
             Sprite = item is not null ? Sprites.Item(item) : null,
             Tooltip = item?.DisplayName ?? "",
         };
+        var itemImagePanel = new Panel()
+        {
+            Layout = LayoutParameters.Fill(),
+            Margin = new(16),
+            HorizontalContentAlignment = Alignment.Start,
+            VerticalContentAlignment = Alignment.End,
+            Children = [itemImage],
+        };
+        var qualityStarSprite = item?.Quality switch
+        {
+            1 => Sprites.QualityStarSilver,
+            2 => Sprites.QualityStarGold,
+            4 => Sprites.QualityStarIridium,
+            _ => null,
+        };
+        if (qualityStarSprite is not null)
+        {
+            itemImagePanel.Children.Add(
+                new Image()
+                {
+                    Name = $"QualityStar_{item!.Quality}",
+                    Layout = LayoutParameters.FixedSize(24, 24),
+                    Margin = new(2, 0),
+                    Sprite = qualityStarSprite,
+                }
+            );
+        }
         var frame = new Frame()
         {
             Name = "ItemSelectorFrame",
             Layout = LayoutParameters.FixedSize(96, 96),
             Background = Sprites.ControlBorder,
             VerticalContentAlignment = Alignment.Middle,
-            Content = itemImage,
+            Content = itemImagePanel,
         };
         var arrow = new Image()
         {
@@ -154,5 +177,77 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
             VerticalContentAlignment = Alignment.Middle,
             Children = [frame, arrow],
         };
+    }
+
+    private GiftTasteInfo? GetGiftTasteInfo(NPC npc, Item? item)
+    {
+        if (
+            item is null
+            || config.GiftTasteVisibility == GiftTasteVisibility.None
+            || (
+                config.GiftTasteVisibility == GiftTasteVisibility.Known
+                && !who.hasGiftTasteBeenRevealed(npc, item.ItemId)
+            )
+        )
+        {
+            return null;
+        }
+        int giftTaste = who.ActiveItem is not null
+            ? npc.getGiftTasteForThisItem(who.ActiveItem)
+            : -1;
+        return GiftTasteInfo.ForGiftTaste(giftTaste);
+    }
+
+    private void OnNpcClick(object? sender, ClickEventArgs e)
+    {
+        if (sender is not IView view)
+        {
+            monitor.Log(
+                $"Invalid click detected; sender is not of type {typeof(IView).Name}.",
+                LogLevel.Error
+            );
+            return;
+        }
+        var npc = view.Tags.Get<NPC>();
+        if (npc is null)
+        {
+            monitor.Log("Could not obtain NPC info from the clicked view.", LogLevel.Error);
+            return;
+        }
+        var item = who.ActiveItem;
+        if (item is null)
+        {
+            monitor.Log(
+                "Unable to send gift; player does not have an active item.",
+                LogLevel.Error
+            );
+            return;
+        }
+        if (config.RequireConfirmation)
+        {
+            Game1.activeClickableMenu = new ConfirmationDialog(
+                I18n.GiftConfirmation_Message(item.DisplayName, npc.displayName),
+                _ => ScheduleSend(npc, item)
+            );
+        }
+        else
+        {
+            ScheduleSend(npc, item);
+        }
+    }
+
+    private void ScheduleSend(NPC npc, Item item)
+    {
+        if (who.ActiveItem != item)
+        {
+            monitor.Log(
+                $"Consistency error; player's {nameof(Farmer.ActiveItem)} no longer matches gifted item.",
+                LogLevel.Error
+            );
+            Game1.showRedMessage(I18n.GiftConfirmation_Error());
+            return;
+        }
+        monitor.Log($"Schedule send of {item.Name} (quality {item.Quality}) to {npc.Name}.", LogLevel.Info);
+        Game1.exitActiveMenu();
     }
 }

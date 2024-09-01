@@ -78,6 +78,24 @@ internal class Sprites
         new(Game1.mouseCursors, SourceRect: new(603, 414, 74, 74), FixedEdges: new(5));
 
     /// <summary>
+    /// Sprite for the gold star indicating item quality 2.
+    /// </summary>
+    public static Sprite QualityStarGold =>
+        new(Game1.mouseCursors, SourceRect: new(346, 400, 8, 8));
+
+    /// <summary>
+    /// Sprite for the iridium star indicating item quality 3.
+    /// </summary>
+    public static Sprite QualityStarIridium =>
+        new(Game1.mouseCursors, SourceRect: new(346, 392, 8, 8));
+
+    /// <summary>
+    /// Sprite for the silver star indicating item quality 1.
+    /// </summary>
+    public static Sprite QualityStarSilver =>
+        new(Game1.mouseCursors, SourceRect: new(338, 400, 8, 8));
+
+    /// <summary>
     /// Caret-style arrow pointing right.
     /// </summary>
     public static Sprite RightCaret => new(Game1.mouseCursors, SourceRect: new(448, 96, 24, 32));
