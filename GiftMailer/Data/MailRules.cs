@@ -27,7 +27,8 @@ public class MailRules(ModConfig config, CustomRules customRules)
         {
             reasons |= NonGiftableReasons.Divorced;
         }
-        if (to.TryGetDialogue("reject_" + item.ItemId) is not null)
+        if (to.TryGetDialogue("reject_" + item.ItemId) is not null
+            || to.TryGetDialogue("RejectItem_" + item.ItemId) is not null)
         {
             reasons |= NonGiftableReasons.Rejection;
         }
