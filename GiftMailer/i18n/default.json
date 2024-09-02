@@ -7,6 +7,10 @@
   "GiftMailMenu.Tooltip.Hated": "Hates this",
 
   // Other UI
-  "GiftConfirmation.Error": "Failed to send gift; check the SMAPI log.",
-  "GiftConfirmation.Message": "Send {{itemName}} to {{npcName}}?"
+  "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",
+  "GiftConfirmation.Replace": "Swap {{previousItem}} with {{itemName}} for {{npcName}}?",
+
+  // Odds and ends
+  "Hud.Confirm.GiftSent": "Sent {{itemName}} to {{npcName}}",
+  "Hud.Error.ScheduleGift": "Failed to schedule gift send; check the SMAPI log."
 }

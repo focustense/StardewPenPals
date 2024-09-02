@@ -223,10 +223,19 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
             );
             return;
         }
+        Game1.playSound("smallSelect");
         if (config.RequireConfirmation)
         {
+            Game1.playSound("breathin");
+            var confirmationMessage = data.OutgoingGifts.TryGetValue(npc.Name, out var previousGift)
+                ? I18n.GiftConfirmation_Replace(
+                    previousGift.DisplayName,
+                    item.DisplayName,
+                    npc.displayName
+                )
+                : I18n.GiftConfirmation_New(item.DisplayName, npc.displayName);
             Game1.activeClickableMenu = new ConfirmationDialog(
-                I18n.GiftConfirmation_Message(item.DisplayName, npc.displayName),
+                confirmationMessage,
                 _ => ScheduleSend(npc, item)
             );
         }
@@ -241,13 +250,38 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
         if (who.ActiveItem != item)
         {
             monitor.Log(
-                $"Consistency error; player's {nameof(Farmer.ActiveItem)} no longer matches gifted item.",
+                $"Couldn't schedule gift: player's {nameof(Farmer.ActiveItem)} no longer matches "
+                    + "the gifted item.",
                 LogLevel.Error
             );
-            Game1.showRedMessage(I18n.GiftConfirmation_Error());
+            Game1.showRedMessage(I18n.Hud_Error_ScheduleGift());
             return;
         }
-        monitor.Log($"Schedule send of {item.Name} (quality {item.Quality}) to {npc.Name}.", LogLevel.Info);
+        if (who.ActiveItem.getOne() is not SObject giftObject)
+        {
+            monitor.Log(
+                $"Couldn't schedule gift: the active item {item.QualifiedItemId} is not an Object type.",
+                LogLevel.Error
+            );
+            Game1.showRedMessage(I18n.Hud_Error_ScheduleGift());
+            return;
+        }
+        who.reduceActiveItemByOne();
+        if (data.OutgoingGifts.TryGetValue(npc.Name, out var previousGiftObject))
+        {
+            who.addItemByMenuIfNecessary(previousGiftObject);
+        }
+        data.OutgoingGifts[npc.Name] = giftObject;
+        Game1.playSound("Ship");
+        monitor.Log(
+            $"Scheduled send of {item.Name} (quality {item.Quality}) to {npc.Name}.",
+            LogLevel.Debug
+        );
         Game1.exitActiveMenu();
+        Game1.addHUDMessage(
+            HUDMessage.ForCornerTextbox(
+                I18n.Hud_Confirm_GiftSent(item.DisplayName, npc.displayName)
+            )
+        );
     }
 }
