@@ -11,6 +11,7 @@ internal static class MailboxPatches
 {
     // Must be set in ModEntry
     public static Func<ModConfig> ConfigSelector { get; set; } = null!;
+    public static Func<CustomRules> CustomRulesSelector { get; set; } = null!;
     public static Func<ModData> DataSelector { get; set; } = null!;
     public static IMonitor Monitor { get; set; } = null!;
 
@@ -51,11 +52,24 @@ internal static class MailboxPatches
 
     private static bool MaybeShowGiftMailMenu()
     {
-        if (Game1.player.ActiveObject is null)
+        var giftObject = Game1.player.ActiveObject;
+        if (giftObject is null || !giftObject.canBeGivenAsGift())
         {
             return false;
         }
         var config = ConfigSelector();
+        if (
+            config.RequireQuestCompletion
+            && !Game1.player.hasSeenActiveDialogueEvent("questComplete_25")
+        )
+        {
+            return false;
+        }
+        var customRules = CustomRulesSelector();
+        if (customRules.Blacklist.Contains(giftObject.QualifiedItemId))
+        {
+            return false;
+        }
         var data = DataSelector();
         var farmerId = Game1.player.UniqueMultiplayerID;
         if (!data.FarmerGiftMail.TryGetValue(farmerId, out var giftMailData))
@@ -63,7 +77,14 @@ internal static class MailboxPatches
             giftMailData = new();
             data.FarmerGiftMail.Add(farmerId, giftMailData);
         }
-        Game1.activeClickableMenu = new GiftMailMenu(config, giftMailData, Game1.player, Monitor);
+        var rules = new MailRules(customRules);
+        Game1.activeClickableMenu = new GiftMailMenu(
+            config,
+            giftMailData,
+            rules,
+            Game1.player,
+            Monitor
+        );
         return true;
     }
 }

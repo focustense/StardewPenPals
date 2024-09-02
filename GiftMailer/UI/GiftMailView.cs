@@ -1,11 +1,17 @@
-﻿using GiftMailer.Data;
+﻿using System.Text;
+using GiftMailer.Data;
 using StardewUI;
 using StardewValley.Menus;
 
 namespace GiftMailer.UI;
 
-internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMonitor monitor)
-    : WrapperView
+internal class GiftMailView(
+    ModConfig config,
+    GiftMailData data,
+    MailRules rules,
+    Farmer who,
+    IMonitor monitor
+) : WrapperView
 {
     private const int GUTTER_HEIGHT = 150;
     private const int GUTTER_WIDTH = 200;
@@ -37,10 +43,10 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
     {
         var cells = Game1
             .characterData.Keys.Select(name => Game1.getCharacterFromName(name))
-            .Where(npc =>
-                npc is not null && npc.CanReceiveGifts() && who.friendshipData.ContainsKey(npc.Name)
-            )
+            .Where(npc => npc is not null)
             .Select(CreateNpcGridCell)
+            .Where(cell => cell is not null)
+            .Select(cell => cell!)
             .ToList();
         return new Grid()
         {
@@ -53,8 +59,20 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
         };
     }
 
-    private IView CreateNpcGridCell(NPC npc)
+    private IView? CreateNpcGridCell(NPC npc)
     {
+        var nonGiftableReasons = rules.CheckGiftability(who, npc, who.ActiveItem);
+        if (
+            (
+                nonGiftableReasons
+                & (NonGiftableReasons.Unmet | NonGiftableReasons.CannotReceiveGifts)
+            ) != 0
+        )
+        {
+            // For immersion, we'd rather not show unmet NPCs; and non-giftable NPCs just clutter
+            // up the UI with non-actionable stuff.
+            return null;
+        }
         var texture = npc.Portrait;
         var sourceRect = Game1.getSourceRectForStandardTileSheet(texture, 0);
         var portrait = new Image()
@@ -64,11 +82,31 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
             Sprite = new(texture, sourceRect),
             VerticalAlignment = Alignment.End,
         };
+        if (nonGiftableReasons != NonGiftableReasons.None)
+        {
+            portrait.Tint = new(0.15f, 0.15f, 0.15f, 0.5f);
+        }
         var taste = GetGiftTasteInfo(npc, who.ActiveItem);
-        var tooltip = npc.displayName;
+        var tooltipBuilder = new StringBuilder(npc.displayName);
         if (taste is not null)
         {
-            tooltip += Environment.NewLine + "(" + taste.Description + ")";
+            tooltipBuilder.AppendLine().Append('(').Append(taste.Description).Append(')');
+        }
+        if (nonGiftableReasons != 0)
+        {
+            tooltipBuilder
+                .AppendLine()
+                .AppendLine()
+                .Append(I18n.GiftMailMenu_Tooltip_NonGiftable());
+            foreach (var value in Enum.GetValues<NonGiftableReasons>().Where(v => v != 0))
+            {
+                if ((nonGiftableReasons & value) == 0)
+                {
+                    continue;
+                }
+                var reasonText = I18n.GetByKey($"Enum.{typeof(NonGiftableReasons).Name}.{value}");
+                tooltipBuilder.AppendLine().Append("* ").Append(reasonText);
+            }
         }
         var panel = new Panel()
         {
@@ -76,8 +114,8 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
             Layout = LayoutParameters.Fill(),
             Margin = new(8, 8, 8, 5),
             VerticalContentAlignment = Alignment.End,
-            Tooltip = tooltip,
-            Tags = Tags.Create(npc),
+            Tooltip = tooltipBuilder.ToString(),
+            Tags = Tags.Create(npc, nonGiftableReasons),
             IsFocusable = true,
             Children = [portrait],
         };
@@ -206,6 +244,11 @@ internal class GiftMailView(ModConfig config, GiftMailData data, Farmer who, IMo
                 $"Invalid click detected; sender is not of type {typeof(IView).Name}.",
                 LogLevel.Error
             );
+            return;
+        }
+        var nonGiftableReasons = view.Tags.Get<NonGiftableReasons>();
+        if (nonGiftableReasons != 0)
+        {
             return;
         }
         var npc = view.Tags.Get<NPC>();

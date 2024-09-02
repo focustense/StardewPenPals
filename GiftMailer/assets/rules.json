@@ -1,0 +1,11 @@
+{
+  "blacklist": [
+    "(O)277", // Wilted bouquet
+    "(O)458", // Bouquet
+    "(O)460", // Mermaid's Pendant
+    "(O)808", // Void Ghost Pendant
+  ],
+  "ignoreLimits": [
+    "(O)StardropTea",
+  ],
+}

@@ -32,6 +32,12 @@ public class ModConfig
     /// </para>
     /// </remarks>
     public bool RequireConfirmation { get; set; } = true;
+
+    /// <summary>
+    /// Whether to require the "Making Friends" quest to have been completed before mailing gifts is
+    /// allowed.
+    /// </summary>
+    public bool RequireQuestCompletion { get; set; } = true;
 }
 
 /// <summary>

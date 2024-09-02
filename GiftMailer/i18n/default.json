@@ -5,12 +5,21 @@
   "GiftMailMenu.Tooltip.Liked": "Likes this",
   "GiftMailMenu.Tooltip.Disliked": "Dislikes this",
   "GiftMailMenu.Tooltip.Hated": "Hates this",
+  "GiftMailMenu.Tooltip.NonGiftable": "Gift not allowed:",
 
   // Other UI
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",
   "GiftConfirmation.Replace": "Swap {{previousItem}} with {{itemName}} for {{npcName}}?",
 
   // Odds and ends
+  "Enum.NonGiftableReasons.Unmet": "You haven't met this person",
+  "Enum.NonGiftableReasons.CannotReceiveGifts": "This person can't receive any gifts",
+  "Enum.NonGiftableReasons.Spouse": "This is your spouse",
+  "Enum.NonGiftableReasons.Divorced": "You divorced them",
+  "Enum.NonGiftableReasons.Child": "This is your child",
+  "Enum.NonGiftableReasons.WeeklyLimit": "You're at the limit for this week",
+  "Enum.NonGiftableReasons.MaxFriendship": "You're already at max hearts",
+  "Enum.NonGiftableReasons.Rejection": "They would reject this gift",
   "Hud.Confirm.GiftSent": "Sent {{itemName}} to {{npcName}}",
   "Hud.Error.ScheduleGift": "Failed to schedule gift send; check the SMAPI log."
 }
