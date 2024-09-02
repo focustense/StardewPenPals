@@ -1,5 +1,7 @@
 ﻿using GiftMailer.Data;
+using GiftMailer.Integrations.Gmcm;
 using HarmonyLib;
+using StardewGiftMailer.Integrations;
 using StardewModdingAPI.Events;
 using StardewUI;
 
@@ -22,6 +24,7 @@ internal sealed class ModEntry : Mod
 
         Logger.Monitor = Monitor;
 
+        Helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
         Helper.Events.Content.AssetRequested += Content_AssetRequested;
 
         MailboxPatches.ConfigSelector = () => config;
@@ -42,5 +45,16 @@ internal sealed class ModEntry : Mod
         {
             e.LoadFromModFile<CustomRules>("assets/rules.json", AssetLoadPriority.Low);
         }
+    }
+
+    private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        Apis.LoadAll(Helper.ModRegistry);
+        ConfigMenu.Register(
+            ModManifest,
+            () => config,
+            reset: () => config = new(),
+            save: () => Helper.WriteConfig(config)
+        );
     }
 }

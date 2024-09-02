@@ -11,7 +11,27 @@
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",
   "GiftConfirmation.Replace": "Swap {{previousItem}} with {{itemName}} for {{npcName}}?",
 
+  // Generic Mod Config Menu
+  "Gmcm.Title": "Too busy for an in-person visit? Send your gifts by mail!",
+  "Gmcm.Ui.Heading": "User Interface",
+  "Gmcm.Ui.GiftTasteVisibility.Name": "Gift taste visibility",
+  "Gmcm.Ui.GiftTasteVisibility.Tooltip": "Show an overlay representing how much each NPC will like the selected gift item.",
+  "Gmcm.Ui.RequireConfirmation.Name": "Confirm before mailing",
+  "Gmcm.Ui.RequireConfirmation.Tooltip": "Show a confirmation dialog allowing you to cancel a gift if you accidentally clicked the wrong NPC.",
+  "Gmcm.Gameplay.Heading": "Gameplay/Immersion",
+  "Gmcm.Gameplay.FriendshipMultiplier.Name": "Friendship points multiplier",
+  "Gmcm.Gameplay.FriendshipMultiplier.Tooltip": "Scale the friendship gain by this value.\nRecommended for balance: 60%",
+  "Gmcm.Gameplay.RequireQuestCompletion.Name": "Require quest completion",
+  "Gmcm.Gameplay.RequireQuestCompletion.Tooltip": "Mailing gifts is only allowed after completing the 'How to Win Friends' quest.",
+  "Gmcm.Gameplay.Scheduling.Name": "Mail schedule",
+  "Gmcm.Gameplay.Scheduling.Tooltip": "When NPCs will actually receive their gift. Next-day is more realistic and consistent with other game mechanics, but requires planning ahead.",
+
   // Odds and ends
+  "Enum.GiftShipmentScheduling.NextDay": "Next Day",
+  "Enum.GiftShipmentScheduling.SameDay": "Same Day",
+  "Enum.GiftTasteVisibility.All": "Show for all gifts and NPCs",
+  "Enum.GiftTasteVisibility.Known": "Only when known to player",
+  "Enum.GiftTasteVisibility.None": "Don't show gift tastes",
   "Enum.NonGiftableReasons.CannotReceiveGifts": "This person can't receive any gifts",
   "Enum.NonGiftableReasons.Child": "This is your child",
   "Enum.NonGiftableReasons.DailyLimit": "You've already given a gift today",

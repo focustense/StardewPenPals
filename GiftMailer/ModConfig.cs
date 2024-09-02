@@ -12,7 +12,7 @@ public class ModConfig
     /// Applies only to relationship <em>gains</em>; sending disliked/hated gifts will still incur
     /// the full penalty.
     /// </remarks>
-    public float FriendshipMultiplier { get; set; } = 0.75f;
+    public float FriendshipMultiplier { get; set; } = 0.6f;
 
     /// <summary>
     /// When to show gift tastes in the UI.

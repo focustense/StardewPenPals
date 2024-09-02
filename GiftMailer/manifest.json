@@ -1,8 +1,8 @@
 ﻿{
-  "Name": "GiftMailer",
+  "Name": "Gift Mailer",
   "Author": "focustense",
   "Version": "0.1.0",
-  "Description": "Description of the mod",
+  "Description": "Send NPCs gifts by mail",
   "UniqueID": "focustense.GiftMailer",
   "EntryDll": "GiftMailer.dll",
   "Dependencies": [
@@ -12,5 +12,5 @@
     }
   ],
   "MinimumApiVersion": "4.0.5",
-  "UpdateKeys": [ "Nexus:0", "GitHub:focustense/GiftMailer" ]
+  "UpdateKeys": [ "Nexus:0", "GitHub:focustense/StardewGiftMailer" ]
 }
