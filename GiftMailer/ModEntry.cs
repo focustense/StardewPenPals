@@ -25,6 +25,8 @@ internal sealed class ModEntry : Mod
         Logger.Monitor = Monitor;
 
         Helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
+        Helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
+        Helper.Events.GameLoop.Saving += GameLoop_Saving;
         Helper.Events.Content.AssetRequested += Content_AssetRequested;
 
         MailboxPatches.ConfigSelector = () => config;
@@ -56,5 +58,15 @@ internal sealed class ModEntry : Mod
             reset: () => config = new(),
             save: () => Helper.WriteConfig(config)
         );
+    }
+
+    private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        data = Helper.Data.ReadSaveData<ModData>(ModManifest.UniqueID) ?? new();
+    }
+
+    private void GameLoop_Saving(object? sender, SavingEventArgs e)
+    {
+        Helper.Data.WriteSaveData(ModManifest.UniqueID, data);
     }
 }

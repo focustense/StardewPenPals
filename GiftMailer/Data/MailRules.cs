@@ -8,6 +8,14 @@ namespace GiftMailer.Data;
 /// <param name="customRules">The custom rule data loaded for the mod.</param>
 public class MailRules(ModConfig config, CustomRules customRules)
 {
+    /// <summary>
+    /// Checks whether a given item can be gifted to a given NPC.
+    /// </summary>
+    /// <param name="from">The player sending the gift.</param>
+    /// <param name="to">The NPC who will receive the gift.</param>
+    /// <param name="item">The item being given as gift.</param>
+    /// <returns>A <see cref="NonGiftableReasons"/> flag value including all reasons why the gift
+    /// cannot be sent.</returns>
     public NonGiftableReasons CheckGiftability(Farmer from, NPC to, Item item)
     {
         var reasons = NonGiftableReasons.None;
