@@ -38,6 +38,41 @@ public class ModConfig
     /// allowed.
     /// </summary>
     public bool RequireQuestCompletion { get; set; } = true;
+
+    /// <summary>
+    /// Configures the schedule on which gift shipments occur.
+    /// </summary>
+    public GiftShipmentScheduling Scheduling { get; set; } = GiftShipmentScheduling.SameDay;
+}
+
+/// <summary>
+/// Allowed shipping schedules for mailed gifts.
+/// </summary>
+public enum GiftShipmentScheduling
+{
+    /// <summary>
+    /// Gifts are received at the end of the same day they were shipped, after the player goes to
+    /// sleep but before the day changes.
+    /// </summary>
+    /// <remarks>
+    /// This is the "simpler" option as all the rules for mailing gifts are essentially the same as
+    /// those for gifting in person, i.e. around daily/weekly limits; sending a gift on an NPC's
+    /// birthday means it is actually received on their birthday, and so on.
+    /// </remarks>
+    SameDay,
+
+    /// <summary>
+    /// Gifts are received at the beginning of the day after they were shipped.
+    /// </summary>
+    /// <remarks>
+    /// This is the "immersive" option that maintains consistency with how gifts are received by the
+    /// player when sent by NPCs. Rules around gift limits are "deferred" - a gift can be mailed on
+    /// the same day a different gift was given in person, but will count toward tomorrow's daily
+    /// limit. Weekly limits are ignored if a gift is mailed on Saturday, since the limits would
+    /// reset on Sunday. Birthday gifts have to be sent the day <em>before</em> an NPC's birthday in
+    /// order to be exempt from limits and/or benefit from the birthday friendship bonus.
+    /// </remarks>
+    NextDay,
 }
 
 /// <summary>

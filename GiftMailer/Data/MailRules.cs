@@ -6,7 +6,7 @@ namespace GiftMailer.Data;
 /// Rules for mailing gifts.
 /// </summary>
 /// <param name="customRules">The custom rule data loaded for the mod.</param>
-public class MailRules(CustomRules customRules)
+public class MailRules(ModConfig config, CustomRules customRules)
 {
     public NonGiftableReasons CheckGiftability(Farmer from, NPC to, Item item)
     {
@@ -40,14 +40,24 @@ public class MailRules(CustomRules customRules)
         {
             reasons |= NonGiftableReasons.MaxFriendship;
         }
-        if (
-            !customRules.IgnoreLimits.Contains(item.QualifiedItemId)
-            && friendship.GiftsThisWeek >= 2
-            && Game1.Date.DayOfWeek != DayOfWeek.Saturday
-            && !IsBirthday(to, WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1))
-        )
+        if (!customRules.IgnoreLimits.Contains(item.QualifiedItemId))
         {
-            reasons |= NonGiftableReasons.WeeklyLimit;
+            var sameDayShipping = config.Scheduling == GiftShipmentScheduling.SameDay;
+            if (sameDayShipping && friendship.GiftsToday >= 1)
+            {
+                reasons |= NonGiftableReasons.DailyLimit;
+            }
+            if (
+                friendship.GiftsThisWeek >= 2
+                && (sameDayShipping || Game1.Date.DayOfWeek != DayOfWeek.Saturday)
+                && !IsBirthday(
+                    to,
+                    sameDayShipping ? Game1.Date : WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1)
+                )
+            )
+            {
+                reasons |= NonGiftableReasons.WeeklyLimit;
+            }
         }
         return reasons;
     }

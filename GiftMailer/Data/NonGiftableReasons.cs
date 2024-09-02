@@ -56,20 +56,28 @@ public enum NonGiftableReasons
     Child = 16,
 
     /// <summary>
+    /// NPC has already been gifted today.
+    /// </summary>
+    /// <remarks>
+    /// Only applicable when using <see cref="GiftShipmentScheduling.SameDay"/>.
+    /// </remarks>
+    DailyLimit = 32,
+
+    /// <summary>
     /// NPC has already been gifted the maximum number of times this week.
     /// </summary>
     /// <remarks>
-    /// Since gifts are sent the <em>next</em> day, this also means that the day of the week is not
-    /// Saturday, because the limits reset on Sunday.
+    /// If using <see cref="GiftShipmentScheduling.NextDay"/>, this also means that the current day
+    /// of the week is not Saturday, because the limits reset on Sunday.
     /// </remarks>
-    WeeklyLimit = 32,
+    WeeklyLimit = 64,
 
     /// <summary>
     /// The player has already maxed friendship with this NPC. May be used as a "soft" restriction,
     /// since this does not prevent gift-giving in the game, only makes it pointless from an
     /// advancement perspective.
     /// </summary>
-    MaxFriendship = 64,
+    MaxFriendship = 128,
 
     /// <summary>
     /// The NPC would reject the gift if given in person.
@@ -78,5 +86,5 @@ public enum NonGiftableReasons
     /// Rejection means they literally do not accept the gift. They "react" to it with a custom
     /// dialogue response but no transfer takes place.
     /// </remarks>
-    Rejection = 128,
+    Rejection = 256,
 }

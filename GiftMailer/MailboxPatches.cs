@@ -77,7 +77,7 @@ internal static class MailboxPatches
             giftMailData = new();
             data.FarmerGiftMail.Add(farmerId, giftMailData);
         }
-        var rules = new MailRules(customRules);
+        var rules = new MailRules(config, customRules);
         Game1.activeClickableMenu = new GiftMailMenu(
             config,
             giftMailData,
