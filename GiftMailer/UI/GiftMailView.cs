@@ -15,7 +15,7 @@ internal class GiftMailView(
 {
     private const int GUTTER_HEIGHT = 150;
     private const int GUTTER_WIDTH = 200;
-    private const int SIDEBAR_MARGIN = 16;
+    private const int SIDEBAR_MARGIN = 8;
     private const int SIDEBAR_WIDTH = 120;
 
     protected override IView CreateView()
@@ -35,7 +35,7 @@ internal class GiftMailView(
             Title = I18n.GiftMailMenu_Title(),
             Content = npcGrid,
             Sidebar = itemSelector,
-            SidebarWidth = SIDEBAR_WIDTH,
+            SidebarWidth = 240,
         };
     }
 
@@ -204,14 +204,13 @@ internal class GiftMailView(
         {
             Name = "SidebarArrow",
             Layout = LayoutParameters.FitContent(),
-            Margin = new(SIDEBAR_MARGIN / 2, 0),
+            Margin = new(SIDEBAR_MARGIN, 0),
             Sprite = Sprites.RightCaret,
         };
         return new Lane()
         {
             Name = "GiftMailSidebar",
             Layout = LayoutParameters.FixedSize(SIDEBAR_WIDTH, height),
-            Margin = new(Right: SIDEBAR_MARGIN),
             VerticalContentAlignment = Alignment.Middle,
             Children = [frame, arrow],
         };
