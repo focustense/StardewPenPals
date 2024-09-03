@@ -60,12 +60,20 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                 var (tasteName, basePoints) = GiftTasteBehavior.ForGiftTaste(giftTaste);
                 var multiplier = basePoints >= 0 ? config.FriendshipMultiplier : 1.0f;
                 var previousFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
-                npc.receiveGift(
-                    giftObject,
-                    farmer,
-                    friendshipChangeMultiplier: multiplier,
-                    showResponse: false
-                );
+                LocationPatches.SuppressGiftSounds = true;
+                try
+                {
+                    npc.receiveGift(
+                        giftObject,
+                        farmer,
+                        friendshipChangeMultiplier: multiplier,
+                        showResponse: false
+                    );
+                }
+                finally
+                {
+                    LocationPatches.SuppressGiftSounds = false;
+                }
                 var nextFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
                 var pointsGained = nextFriendship - previousFriendship;
                 results.Add(new(farmer, npc, giftObject, tasteName, pointsGained));

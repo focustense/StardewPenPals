@@ -44,6 +44,10 @@ internal sealed class ModEntry : Mod
             AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
             transpiler: new(typeof(MailboxPatches), nameof(MailboxPatches.MailboxTranspiler))
         );
+        harmony.Patch(
+            AccessTools.Method(typeof(GameLocation), nameof(GameLocation.localSound)),
+            prefix: new(typeof(LocationPatches), nameof(LocationPatches.LocalSound_Prefix))
+        );
 
         var commandHandler = new CommandHandler(Monitor, ROOT_COMMAND);
         commandHandler.AddCommand(new DryRunCommand(GetRulesContext));
