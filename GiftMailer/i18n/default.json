@@ -1,10 +1,10 @@
 {
   // Menu text and controls
   "GiftMailMenu.Title": "Send a gift",
-  "GiftMailMenu.Tooltip.Loved": "Loves this",
-  "GiftMailMenu.Tooltip.Liked": "Likes this",
-  "GiftMailMenu.Tooltip.Disliked": "Dislikes this",
-  "GiftMailMenu.Tooltip.Hated": "Hates this",
+  "GiftMailMenu.Tooltip.Love": "Loves this",
+  "GiftMailMenu.Tooltip.Like": "Likes this",
+  "GiftMailMenu.Tooltip.Dislike": "Dislikes this",
+  "GiftMailMenu.Tooltip.Hate": "Hates this",
   "GiftMailMenu.Tooltip.NonGiftable": "Gift not allowed:",
 
   // Other UI
@@ -37,7 +37,8 @@
   "Enum.NonGiftableReasons.DailyLimit": "You've already given a gift today",
   "Enum.NonGiftableReasons.Divorced": "You divorced them",
   "Enum.NonGiftableReasons.MaxFriendship": "You're already at max hearts",
-  "Enum.NonGiftableReasons.Rejection": "They would reject this gift",
+  "Enum.NonGiftableReasons.NoDwarvish": "You don't understand Dwarvish",
+  "Enum.NonGiftableReasons.Rejection": "They can't accept this item",
   "Enum.NonGiftableReasons.Spouse": "This is your spouse",
   "Enum.NonGiftableReasons.Unmet": "You haven't met this person",
   "Enum.NonGiftableReasons.WeeklyLimit": "You're at the limit for this week",

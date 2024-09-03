@@ -16,31 +16,31 @@ public record GiftTasteInfo(string Description, Sprite Sprite, Color Tint)
     /// <summary>
     /// Gift taste for a loved gift.
     /// </summary>
-    public static GiftTasteInfo Loved => loved.Value;
+    public static GiftTasteInfo Love => love.Value;
 
     /// <summary>
     /// Gift taste for a liked gift.
     /// </summary>
-    public static GiftTasteInfo Liked => liked.Value;
+    public static GiftTasteInfo Like => like.Value;
 
     /// <summary>
     /// Gift taste for a disliked gift.
     /// </summary>
-    public static GiftTasteInfo Disliked => disliked.Value;
+    public static GiftTasteInfo Dislike => dislike.Value;
 
     /// <summary>
     /// Gift taste for a hated gift.
     /// </summary>
-    public static GiftTasteInfo Hated => hated.Value;
+    public static GiftTasteInfo Hate => hate.Value;
 
-    private static readonly Lazy<GiftTasteInfo> loved =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Loved(), Sprites.EmojiGrin, Color.Cyan));
-    private static readonly Lazy<GiftTasteInfo> liked =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Liked(), Sprites.EmojiHappy, Color.White));
-    private static readonly Lazy<GiftTasteInfo> disliked =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Disliked(), Sprites.EmojiUnhappy, Color.Orange));
-    private static readonly Lazy<GiftTasteInfo> hated =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Hated(), Sprites.EmojiAngry, Color.Red));
+    private static readonly Lazy<GiftTasteInfo> love =
+        new(() => new(I18n.GiftMailMenu_Tooltip_Love(), Sprites.EmojiGrin, Color.Cyan));
+    private static readonly Lazy<GiftTasteInfo> like =
+        new(() => new(I18n.GiftMailMenu_Tooltip_Like(), Sprites.EmojiHappy, Color.White));
+    private static readonly Lazy<GiftTasteInfo> dislike =
+        new(() => new(I18n.GiftMailMenu_Tooltip_Dislike(), Sprites.EmojiUnhappy, Color.Orange));
+    private static readonly Lazy<GiftTasteInfo> hate =
+        new(() => new(I18n.GiftMailMenu_Tooltip_Hate(), Sprites.EmojiAngry, Color.Red));
 
     /// <summary>
     /// Gets the info for a gift taste value as obtained from <see cref="NPC.getGiftTasteForThisItem(Item)"/>.
@@ -51,10 +51,10 @@ public record GiftTasteInfo(string Description, Sprite Sprite, Color Tint)
     {
         return giftTaste switch
         {
-            0 => Loved,
-            2 => Liked,
-            4 => Disliked,
-            6 => Hated,
+            0 => Love,
+            2 => Like,
+            4 => Dislike,
+            6 => Hate,
             _ => null,
         };
     }

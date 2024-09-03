@@ -87,4 +87,12 @@ public enum NonGiftableReasons
     /// dialogue response but no transfer takes place.
     /// </remarks>
     Rejection = 256,
+
+    /// <summary>
+    /// The NPC is a dwarf and the player has not read the translation guide.
+    /// </summary>
+    /// <remarks>
+    /// This is the same rule as regular in-person giftability of the dwarf.
+    /// </remarks>
+    NoDwarvish = 512,
 }

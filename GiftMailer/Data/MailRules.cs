@@ -35,8 +35,14 @@ public class MailRules(ModConfig config, CustomRules customRules)
         {
             reasons |= NonGiftableReasons.Divorced;
         }
-        if (to.TryGetDialogue("reject_" + item.ItemId) is not null
-            || to.TryGetDialogue("RejectItem_" + item.ItemId) is not null)
+        if (to.SpeaksDwarvish() && !from.canUnderstandDwarves)
+        {
+            reasons |= NonGiftableReasons.NoDwarvish;
+        }
+        if (
+            to.TryGetDialogue("reject_" + item.ItemId) is not null
+            || to.TryGetDialogue("RejectItem_" + item.ItemId) is not null
+        )
         {
             reasons |= NonGiftableReasons.Rejection;
         }
@@ -59,16 +65,70 @@ public class MailRules(ModConfig config, CustomRules customRules)
             if (
                 friendship.GiftsThisWeek >= 2
                 && (sameDayShipping || Game1.Date.DayOfWeek != DayOfWeek.Saturday)
-                && !IsBirthday(
-                    to,
-                    sameDayShipping ? Game1.Date : WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1)
-                )
+                && !WillReceiveOnBirthday(to)
             )
             {
                 reasons |= NonGiftableReasons.WeeklyLimit;
             }
         }
         return reasons;
+    }
+
+    /// <summary>
+    /// Estimates (with high accuracy) the amount of friendship gain expected from
+    /// <see cref="NPC.receiveGift"/>.
+    /// </summary>
+    /// <param name="from">The player sending the gift.</param>
+    /// <param name="to">The NPC who will receive the gift.</param>
+    /// <param name="item">The item being given as gift.</param>
+    /// <returns></returns>
+    public int EstimateFriendshipGain(Farmer from, NPC to, Item item)
+    {
+        float multiplier = GetQualityMultiplier(item.Quality);
+        if (WillReceiveOnBirthday(to))
+        {
+            multiplier *= 8f;
+        }
+        if (to.getSpouse() == from)
+        {
+            multiplier /= 2f;
+        }
+        var taste = to.getGiftTasteForThisItem(item);
+        var (_, basePoints) = GiftTasteBehavior.ForGiftTaste(taste);
+        if (basePoints > 0)
+        {
+            multiplier *= config.FriendshipMultiplier;
+        }
+        var resultPoints = (int)(basePoints * multiplier);
+        int currentPoints = 0;
+        if (from.friendshipData.TryGetValue(to.Name, out var friendship))
+        {
+            currentPoints = friendship.Points;
+            var maxPoints = GetMaxFriendship(friendship, to.datable.Value);
+            var remainingPoints = Math.Max(maxPoints - currentPoints, 0);
+            resultPoints = Math.Min(resultPoints, remainingPoints);
+        }
+        if (resultPoints < 0)
+        {
+            resultPoints = Math.Max(resultPoints, -currentPoints);
+        }
+        return resultPoints;
+    }
+
+    /// <summary>
+    /// Checks whether the NPC will receive the gift on his/her birthday, given the current world
+    /// date and configuration settings (<see cref="ModConfig.Scheduling"/>).
+    /// </summary>
+    /// <param name="npc">The NPC who will receive the gift.</param>
+    /// <returns><c>true</c> if the gift would be received on the NPC's birthday, otherwise
+    /// <c>false</c>.</returns>
+    public bool WillReceiveOnBirthday(NPC npc)
+    {
+        var comparisonDate =
+            config.Scheduling == GiftShipmentScheduling.SameDay
+                ? Game1.Date
+                : WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1);
+        return IsBirthday(npc, comparisonDate);
     }
 
     // Does the same thing as Utility.GetMaximumHeartsForCharacter but doesn't assume Game1.player.
@@ -84,6 +144,17 @@ public class MailRules(ModConfig config, CustomRules customRules)
             maxHearts = 10;
         }
         return maxHearts * 250;
+    }
+
+    private static float GetQualityMultiplier(int quality)
+    {
+        return quality switch
+        {
+            1 => 1.1f,
+            2 => 1.25f,
+            4 => 1.5f,
+            _ => 1.0f,
+        };
     }
 
     private static bool IsBirthday(NPC npc, WorldDate date)
