@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using GiftMailer.Data;
+using GiftMailer.Logging;
 
 namespace GiftMailer.Commands;
 
@@ -13,46 +13,36 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
     public string Description =>
         "Display the expected results of the next gift mailing, but don't actually send the gifts.";
 
-    private static readonly int[] COLUMN_WIDTHS = [12, 12, 20, 14, 5];
-
     public void Execute(DryRunArgs args)
     {
         var context = contextSelector();
-        var output = new StringBuilder();
-        output.AppendLine("Results of Gift Mail dry-run:");
-        output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Top);
-        output.AppendColumns(COLUMN_WIDTHS, "From", "To", "Gift", "Reaction", "Pts");
-        output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Middle);
+        var results = new List<GiftResult>();
         foreach (var (playerId, giftData) in context.Data.FarmerGiftMail)
         {
             var farmer = Game1.getFarmerMaybeOffline(playerId);
-            var farmerName = farmer?.Name ?? "???";
+            if (farmer is null)
+            {
+                context.Monitor.Log($"Could not find Farmer with ID: {playerId}", LogLevel.Error);
+                continue;
+            }
             foreach (var (npcName, giftObject) in giftData.OutgoingGifts)
             {
                 var npc = Game1.getCharacterFromName(npcName);
+                if (npc is null)
+                {
+                    context.Monitor.Log($"Could not find NPC named '{npcName}'.", LogLevel.Error);
+                    continue;
+                }
                 var (tasteName, points) = GetExpectedOutcome(
                     farmer,
                     npc,
                     giftObject,
                     context.Rules
                 );
-                var giftName = giftObject.Name;
-                if (giftObject.Quality > 0)
-                {
-                    giftName = "(" + GetQualityChar(giftObject.Quality) + ") " + giftName;
-                }
-                output.AppendColumns(
-                    COLUMN_WIDTHS,
-                    farmerName,
-                    npcName,
-                    giftName,
-                    tasteName,
-                    points
-                );
+                results.Add(new(farmer, npc, giftObject, tasteName, points));
             }
         }
-        output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Bottom);
-        context.Monitor.Log(output.ToString(), LogLevel.Info);
+        GiftLogger.LogResults(results, "Results of Gift Mail dry-run:", context.Monitor);
     }
 
     public bool TryParseArgs(
@@ -67,20 +57,12 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
     }
 
     private static (string, int) GetExpectedOutcome(
-        Farmer? farmer,
-        NPC? npc,
+        Farmer farmer,
+        NPC npc,
         SObject giftObject,
         MailRules rules
     )
     {
-        if (farmer is null)
-        {
-            return ("FARMER MISSING", 0);
-        }
-        else if (npc is null)
-        {
-            return ("NPC MISSING", 0);
-        }
         var nonGiftableReasons = rules.CheckGiftability(farmer, npc, giftObject);
         if (nonGiftableReasons != 0)
         {
@@ -90,16 +72,5 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
         var (tasteName, _) = GiftTasteBehavior.ForGiftTaste(taste);
         var estimatedPoints = rules.EstimateFriendshipGain(farmer, npc, giftObject);
         return (tasteName, estimatedPoints);
-    }
-
-    private static char GetQualityChar(int quality)
-    {
-        return quality switch
-        {
-            1 => 'S',
-            2 => 'G',
-            4 => 'I',
-            _ => '?',
-        };
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace GiftMailer.Commands;
+namespace GiftMailer.Logging;
 
 internal enum BorderLine
 {

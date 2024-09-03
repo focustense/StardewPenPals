@@ -1,6 +1,7 @@
 ﻿using GiftMailer.Commands;
 using GiftMailer.Data;
 using GiftMailer.Integrations.Gmcm;
+using GiftMailer.Logging;
 using HarmonyLib;
 using StardewGiftMailer.Integrations;
 using StardewModdingAPI.Events;
@@ -92,7 +93,8 @@ internal sealed class ModEntry : Mod
             return;
         }
         var distributor = GetGiftDistributor();
-        distributor.ReceiveAll();
+        var results = distributor.ReceiveAll();
+        GiftLogger.LogResults(results, "Start-of-Day Gift Results:", Monitor, LogLevel.Debug);
     }
 
     private void GameLoop_DayEnding(object? sender, DayEndingEventArgs e)
@@ -102,7 +104,8 @@ internal sealed class ModEntry : Mod
             return;
         }
         var distributor = GetGiftDistributor();
-        distributor.ReceiveAll();
+        var results = distributor.ReceiveAll();
+        GiftLogger.LogResults(results, "End-of-Day Gift Results:", Monitor, LogLevel.Debug);
     }
 
     private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
