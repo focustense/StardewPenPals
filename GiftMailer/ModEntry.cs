@@ -46,6 +46,9 @@ internal sealed class ModEntry : Mod
         commandHandler.AddCommand(
             new DryRunCommand(() => config, () => data, GetCustomRules, Monitor)
         );
+        commandHandler.AddCommand(
+            new ReceiveAllCommand(() => config, () => data, GetCustomRules, Monitor)
+        );
         Helper.ConsoleCommands.Add(
             ROOT_COMMAND,
             $"Run commands associated with {ModManifest.Name}. Type '{ROOT_COMMAND} help' for options.",

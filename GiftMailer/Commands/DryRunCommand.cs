@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using GiftMailer.Data;
-using StardewValley.GameData.Characters;
 
 namespace GiftMailer.Commands;
 
