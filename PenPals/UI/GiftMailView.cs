@@ -1,7 +1,7 @@
-﻿using PenPals.Data;
+﻿using System.Text;
+using PenPals.Data;
 using StardewUI;
 using StardewValley.Menus;
-using System.Text;
 
 namespace PenPals.UI;
 

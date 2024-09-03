@@ -1,5 +1,5 @@
-﻿using PenPals.Data;
-using System.Text;
+﻿using System.Text;
+using PenPals.Data;
 
 namespace PenPals.Logging;
 

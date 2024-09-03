@@ -1,6 +1,6 @@
-﻿using PenPals.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using PenPals.Data;
 using PenPals.Logging;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PenPals.Commands;
 
