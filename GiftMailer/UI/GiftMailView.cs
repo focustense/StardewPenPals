@@ -98,13 +98,8 @@ internal class GiftMailView(
                 .AppendLine()
                 .AppendLine()
                 .Append(I18n.GiftMailMenu_Tooltip_NonGiftable());
-            foreach (var value in Enum.GetValues<NonGiftableReasons>().Where(v => v != 0))
+            foreach (var reasonText in nonGiftableReasons.ToTranslatedStrings())
             {
-                if ((nonGiftableReasons & value) == 0)
-                {
-                    continue;
-                }
-                var reasonText = I18n.GetByKey($"Enum.{typeof(NonGiftableReasons).Name}.{value}");
                 tooltipBuilder.AppendLine().Append("* ").Append(reasonText);
             }
         }

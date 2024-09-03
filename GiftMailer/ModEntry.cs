@@ -35,6 +35,7 @@ internal sealed class ModEntry : Mod
         MailboxPatches.ConfigSelector = () => config;
         MailboxPatches.CustomRulesSelector = GetCustomRules;
         MailboxPatches.DataSelector = () => data;
+        MailboxPatches.ModManifest = ModManifest;
         MailboxPatches.Monitor = Monitor;
         var harmony = new Harmony(ModManifest.UniqueID);
         harmony.Patch(
@@ -43,12 +44,8 @@ internal sealed class ModEntry : Mod
         );
 
         var commandHandler = new CommandHandler(Monitor, ROOT_COMMAND);
-        commandHandler.AddCommand(
-            new DryRunCommand(() => config, () => data, GetCustomRules, Monitor)
-        );
-        commandHandler.AddCommand(
-            new ReceiveAllCommand(() => config, () => data, GetCustomRules, Monitor)
-        );
+        commandHandler.AddCommand(new DryRunCommand(GetRulesContext));
+        commandHandler.AddCommand(new ReceiveAllCommand(GetGiftDistributor));
         Helper.ConsoleCommands.Add(
             ROOT_COMMAND,
             $"Run commands associated with {ModManifest.Name}. Type '{ROOT_COMMAND} help' for options.",
@@ -61,6 +58,24 @@ internal sealed class ModEntry : Mod
         if (e.NameWithoutLocale.IsEquivalentTo(CustomRulesAssetName))
         {
             e.LoadFromModFile<CustomRules>("assets/rules.json", AssetLoadPriority.Low);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo("Data/Mail"))
+        {
+            e.Edit(mailData =>
+            {
+                var mail = mailData.AsDictionary<string, string>();
+                foreach (var giftData in data.FarmerGiftMail.Values)
+                {
+                    foreach (var (returnId, returnedGift) in giftData.ReturnedGifts)
+                    {
+                        var mailKey = GiftMailData.GetReturnMailKey(returnId);
+                        var descriptionText = returnedGift.ToMailString(
+                            config.DetailedReturnReasons
+                        );
+                        mail.Data[mailKey] = descriptionText;
+                    }
+                }
+            });
         }
     }
 
@@ -88,5 +103,23 @@ internal sealed class ModEntry : Mod
     private CustomRules GetCustomRules()
     {
         return Helper.GameContent.Load<CustomRules>(CustomRulesAssetName);
+    }
+
+    private GiftDistributor GetGiftDistributor()
+    {
+        var context = GetRulesContext();
+        return new(context, Helper.GameContent);
+    }
+
+    private ModContext GetModContext()
+    {
+        return new(ModManifest, config, data, Monitor);
+    }
+
+    private RulesContext GetRulesContext()
+    {
+        var customRules = GetCustomRules();
+        var mailRules = new MailRules(config, customRules);
+        return new(ModManifest, config, data, mailRules, Monitor);
     }
 }

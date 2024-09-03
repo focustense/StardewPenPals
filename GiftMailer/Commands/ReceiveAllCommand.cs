@@ -6,12 +6,8 @@ namespace GiftMailer.Commands;
 
 internal record ReceiveAllArgs();
 
-internal class ReceiveAllCommand(
-    Func<ModConfig> configSelector,
-    Func<ModData> dataSelector,
-    Func<CustomRules> customRulesSelector,
-    IMonitor monitor
-) : ICommand<ReceiveAllArgs>
+internal class ReceiveAllCommand(Func<GiftDistributor> distributorFactory)
+    : ICommand<ReceiveAllArgs>
 {
     public string Name => "receiveall";
 
@@ -22,12 +18,9 @@ internal class ReceiveAllCommand(
 
     public void Execute(ReceiveAllArgs args)
     {
-        var config = configSelector();
-        var data = dataSelector();
-        var rules = new MailRules(config, customRulesSelector());
-        var distributor = new GiftDistributor(config, data, rules, monitor);
+        var distributor = distributorFactory();
         var results = distributor.ReceiveAll();
-        PrintResults(results);
+        PrintResults(results, distributor.Context.Monitor);
     }
 
     public bool TryParseArgs(
@@ -52,10 +45,10 @@ internal class ReceiveAllCommand(
         };
     }
 
-    private void PrintResults(IEnumerable<GiftResult> results)
+    private void PrintResults(IEnumerable<GiftResult> results, IMonitor monitor)
     {
         var output = new StringBuilder();
-        output.AppendLine("Results of Gift Mail dry-run:");
+        output.AppendLine("Gift shipment results:");
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Top);
         output.AppendColumns(COLUMN_WIDTHS, "From", "To", "Gift", "Reaction", "Pts");
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Middle);

@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 using GiftMailer.Data;
 using GiftMailer.UI;
 using HarmonyLib;
+using StardewValley.Menus;
 
 namespace GiftMailer;
 
@@ -13,6 +14,7 @@ internal static class MailboxPatches
     public static Func<ModConfig> ConfigSelector { get; set; } = null!;
     public static Func<CustomRules> CustomRulesSelector { get; set; } = null!;
     public static Func<ModData> DataSelector { get; set; } = null!;
+    public static IManifest ModManifest { get; set; } = null!;
     public static IMonitor Monitor { get; set; } = null!;
 
     [SuppressMessage(
@@ -35,7 +37,20 @@ internal static class MailboxPatches
             typeof(MailboxPatches),
             nameof(MaybeShowGiftMailMenu)
         );
-        var matcher = new CodeMatcher(instructions).MatchEndForward(
+        var activeClickableMenuSetter = AccessTools.PropertySetter(
+            typeof(Game1),
+            nameof(Game1.activeClickableMenu)
+        );
+        var addReturnedItemMethod = AccessTools.Method(
+            typeof(MailboxPatches),
+            nameof(MaybeAddReturnedItem)
+        );
+        var matcher = new CodeMatcher(instructions);
+        matcher
+            .MatchEndForward(new CodeMatch(OpCodes.Call, activeClickableMenuSetter))
+            .Advance(1)
+            .Insert(new CodeInstruction(OpCodes.Call, addReturnedItemMethod));
+        matcher.MatchEndForward(
             new CodeMatch(OpCodes.Call, mailboxGetter),
             new CodeMatch(OpCodes.Callvirt, listCountGetter),
             new CodeMatch(OpCodes.Brtrue_S)
@@ -48,6 +63,46 @@ internal static class MailboxPatches
                 new CodeInstruction(OpCodes.Brtrue_S, endLabel)
             );
         return matcher.InstructionEnumeration();
+    }
+
+    private static void MaybeAddReturnedItem()
+    {
+        if (
+            Game1.activeClickableMenu is not LetterViewerMenu menu
+            || !DataSelector()
+                .FarmerGiftMail.TryGetValue(Game1.player.UniqueMultiplayerID, out var giftData)
+        )
+        {
+            return;
+        }
+        var returnId = GiftMailData.GetReturnIdFromMailKey(menu.mailTitle);
+        if (
+            string.IsNullOrEmpty(returnId)
+            || !giftData.ReturnedGifts.TryGetValue(returnId, out var returnedGift)
+        )
+        {
+            return;
+        }
+        // From LetterViewMenu.cs; neighbor IDs, coordinates, etc. are all hardcoded.
+        menu.itemsToGrab.Add(
+            new ClickableComponent(
+                new Rectangle(
+                    menu.xPositionOnScreen + menu.width / 2 - 48,
+                    menu.yPositionOnScreen + menu.height - 32 - 96,
+                    96,
+                    96
+                ),
+                returnedGift.GiftObject
+            )
+            {
+                myID = 104,
+                leftNeighborID = 101,
+                rightNeighborID = 102,
+            }
+        );
+        menu.backButton.rightNeighborID = 104;
+        menu.forwardButton.leftNeighborID = 104;
+        giftData.ReturnedGifts.Remove(returnId);
     }
 
     private static bool MaybeShowGiftMailMenu()

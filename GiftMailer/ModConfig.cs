@@ -6,6 +6,15 @@
 public class ModConfig
 {
     /// <summary>
+    /// Whether to display a list of the non-giftable reasons if a gift is returned by mail.
+    /// </summary>
+    /// <remarks>
+    /// This is very unimmersive as it brings "rule-speak" into the game content, but can be useful
+    /// for troubleshooting and may not bother all players.
+    /// </remarks>
+    public bool DetailedReturnReasons { get; set; } = false;
+
+    /// <summary>
     /// Multiplier that applies to the friendship points gained from gifting.
     /// </summary>
     /// <remarks>

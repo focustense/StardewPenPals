@@ -6,12 +6,7 @@ namespace GiftMailer.Commands;
 
 internal record DryRunArgs();
 
-internal class DryRunCommand(
-    Func<ModConfig> configSelector,
-    Func<ModData> dataSelector,
-    Func<CustomRules> customRulesSelector,
-    IMonitor monitor
-) : ICommand<DryRunArgs>
+internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryRunArgs>
 {
     public string Name => "dryrun";
 
@@ -22,22 +17,25 @@ internal class DryRunCommand(
 
     public void Execute(DryRunArgs args)
     {
-        var config = configSelector();
-        var data = dataSelector();
-        var rules = new MailRules(config, customRulesSelector());
+        var context = contextSelector();
         var output = new StringBuilder();
         output.AppendLine("Results of Gift Mail dry-run:");
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Top);
         output.AppendColumns(COLUMN_WIDTHS, "From", "To", "Gift", "Reaction", "Pts");
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Middle);
-        foreach (var (playerId, giftData) in data.FarmerGiftMail)
+        foreach (var (playerId, giftData) in context.Data.FarmerGiftMail)
         {
             var farmer = Game1.getFarmerMaybeOffline(playerId);
             var farmerName = farmer?.Name ?? "???";
             foreach (var (npcName, giftObject) in giftData.OutgoingGifts)
             {
                 var npc = Game1.getCharacterFromName(npcName);
-                var (tasteName, points) = GetExpectedOutcome(farmer, npc, giftObject, rules);
+                var (tasteName, points) = GetExpectedOutcome(
+                    farmer,
+                    npc,
+                    giftObject,
+                    context.Rules
+                );
                 var giftName = giftObject.Name;
                 if (giftObject.Quality > 0)
                 {
@@ -54,7 +52,7 @@ internal class DryRunCommand(
             }
         }
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Bottom);
-        monitor.Log(output.ToString(), LogLevel.Info);
+        context.Monitor.Log(output.ToString(), LogLevel.Info);
     }
 
     public bool TryParseArgs(

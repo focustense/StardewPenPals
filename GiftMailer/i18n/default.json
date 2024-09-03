@@ -19,12 +19,18 @@
   "Gmcm.Ui.RequireConfirmation.Name": "Confirm before mailing",
   "Gmcm.Ui.RequireConfirmation.Tooltip": "Show a confirmation dialog allowing you to cancel a gift if you accidentally clicked the wrong NPC.",
   "Gmcm.Gameplay.Heading": "Gameplay/Immersion",
+  "Gmcm.Gameplay.DetailedReturnReasons.Name": "Detailed return reasons",
+  "Gmcm.Gameplay.DetailedReturnReasons.Tooltip": "Show a detailed (unimmersive) explanation in return letters for why the gift was sent back.",
   "Gmcm.Gameplay.FriendshipMultiplier.Name": "Friendship points multiplier",
   "Gmcm.Gameplay.FriendshipMultiplier.Tooltip": "Scale the friendship gain by this value.\nRecommended for balance: 60%",
   "Gmcm.Gameplay.RequireQuestCompletion.Name": "Require quest completion",
   "Gmcm.Gameplay.RequireQuestCompletion.Tooltip": "Mailing gifts is only allowed after completing the 'How to Win Friends' quest.",
   "Gmcm.Gameplay.Scheduling.Name": "Mail schedule",
   "Gmcm.Gameplay.Scheduling.Tooltip": "When NPCs will actually receive their gift. Next-day is more realistic and consistent with other game mechanics, but requires planning ahead.",
+
+  // Gift returns
+  "Mail.GiftReturned.Base": "We were unable to deliver your package.^^Sent on: {{sentDate}}^Addressee: {{npcName}}^^We apologize for any inconvenience this may cause.^^- PTPS{{details}}[#]Undeliverable Mail",
+  "Mail.GiftReturned.Details": "^^(Refused because:{{reasons}})",
 
   // Odds and ends
   "Enum.GiftShipmentScheduling.NextDay": "Next Day",

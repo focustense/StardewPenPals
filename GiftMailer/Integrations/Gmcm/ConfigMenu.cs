@@ -54,5 +54,12 @@ internal static class ConfigMenu
             interval: 0.05f,
             formatValue: value => value.ToString("P0")
         );
+        gmcm.AddBoolOption(
+            mod,
+            getValue: () => config().DetailedReturnReasons,
+            setValue: value => config().DetailedReturnReasons = value,
+            name: I18n.Gmcm_Gameplay_DetailedReturnReasons_Name,
+            tooltip: I18n.Gmcm_Gameplay_DetailedReturnReasons_Tooltip
+        );
     }
 }

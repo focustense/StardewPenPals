@@ -3,14 +3,25 @@
 /// <summary>
 /// Helper class for distributing outgoing gifts, i.e. making NPCs actually receive them.
 /// </summary>
-public class GiftDistributor(ModConfig config, ModData data, MailRules rules, IMonitor monitor)
+public class GiftDistributor(RulesContext context, IGameContentHelper contentHelper)
 {
+    /// <summary>
+    /// The context used to initialize this distributor.
+    /// </summary>
+    public RulesContext Context { get; } = context;
+
+    private readonly ModConfig config = context.Config;
+    private readonly ModData data = context.Data;
+    private readonly IMonitor monitor = context.Monitor;
+    private readonly MailRules rules = context.Rules;
+
     /// <summary>
     /// Make all NPCs receive their gifts immediately.
     /// </summary>
     public IReadOnlyList<GiftResult> ReceiveAll()
     {
         var results = new List<GiftResult>();
+        bool hasReturns = false;
         foreach (var (playerId, giftData) in data.FarmerGiftMail)
         {
             var farmer = Game1.getFarmerMaybeOffline(playerId);
@@ -36,6 +47,13 @@ public class GiftDistributor(ModConfig config, ModData data, MailRules rules, IM
                     results.Add(
                         new(farmer, npc, giftObject, $"Returned:{(int)nonGiftableReasons}", 0)
                     );
+                    var returnId = Guid.NewGuid().ToString();
+                    giftData.ReturnedGifts.Add(
+                        returnId,
+                        new(npcName, giftObject, Game1.Date, nonGiftableReasons)
+                    );
+                    farmer.mailbox.Add(GiftMailData.GetReturnMailKey(returnId));
+                    hasReturns = true;
                     continue;
                 }
                 var giftTaste = npc.getGiftTasteForThisItem(giftObject);
@@ -59,10 +77,11 @@ public class GiftDistributor(ModConfig config, ModData data, MailRules rules, IM
             {
                 continue;
             }
-            if (giftData.OutgoingGifts.Remove(result.To.Name) && giftData.OutgoingGifts.Count == 0)
-            {
-                data.FarmerGiftMail.Remove(result.From.UniqueMultiplayerID);
-            }
+            giftData.OutgoingGifts.Remove(result.To.Name);
+        }
+        if (hasReturns)
+        {
+            contentHelper.InvalidateCache("Data/Mail");
         }
         return results;
     }
