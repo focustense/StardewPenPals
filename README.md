@@ -110,8 +110,6 @@ All of this mod's options are configurable through GMCM. If you prefer to edit t
 
 ### Settings
 
-Describe the individual configuration attributes below (and delete this line).
-
 * `DetailedReturnReasons`: Whether to show the exact reason why a gift was returned in the [return mail](#returns). Valid values are `true` or `false`.
 * `FriendshipMultiplier`: Scales down the friendship gain when a gift is mailed, compared to an in-person gift. This can be any numeric value, but see [Balance](#balance) for details.
 * `GiftTasteVisibility`: When to show gift tastes for NPCs in the gift-mail menu. Valid values are:
