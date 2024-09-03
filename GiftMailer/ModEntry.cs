@@ -28,6 +28,8 @@ internal sealed class ModEntry : Mod
         Logger.Monitor = Monitor;
 
         Helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
+        Helper.Events.GameLoop.DayEnding += GameLoop_DayEnding;
+        Helper.Events.GameLoop.DayStarted += GameLoop_DayStarted;
         Helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
         Helper.Events.GameLoop.Saving += GameLoop_Saving;
         Helper.Events.Content.AssetRequested += Content_AssetRequested;
@@ -77,6 +79,26 @@ internal sealed class ModEntry : Mod
                 }
             });
         }
+    }
+
+    private void GameLoop_DayStarted(object? sender, DayStartedEventArgs e)
+    {
+        if (config.Scheduling != GiftShipmentScheduling.NextDay)
+        {
+            return;
+        }
+        var distributor = GetGiftDistributor();
+        distributor.ReceiveAll();
+    }
+
+    private void GameLoop_DayEnding(object? sender, DayEndingEventArgs e)
+    {
+        if (config.Scheduling != GiftShipmentScheduling.SameDay)
+        {
+            return;
+        }
+        var distributor = GetGiftDistributor();
+        distributor.ReceiveAll();
     }
 
     private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
