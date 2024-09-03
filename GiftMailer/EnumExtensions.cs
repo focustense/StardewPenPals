@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace GiftMailer;
+namespace PenPals;
 
 /// <summary>
 /// Extensions for enum and flag types.

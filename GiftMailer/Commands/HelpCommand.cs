@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 
-namespace GiftMailer.Commands;
+namespace PenPals.Commands;
 
 internal record HelpArgs(
     [property: Optional]

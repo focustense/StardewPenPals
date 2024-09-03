@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace GiftMailer.Logging;
+namespace PenPals.Logging;
 
 internal enum BorderLine
 {

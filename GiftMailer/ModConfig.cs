@@ -1,7 +1,7 @@
-﻿namespace GiftMailer;
+﻿namespace PenPals;
 
 /// <summary>
-/// Configuration settings for GiftMailer.
+/// Configuration settings for PenPals.
 /// </summary>
 public class ModConfig
 {

@@ -1,6 +1,6 @@
 ﻿using GenericModConfigMenu;
 
-namespace GiftMailer.Integrations.Gmcm;
+namespace PenPals.Integrations.Gmcm;
 
 internal static class GmcmExtensions
 {

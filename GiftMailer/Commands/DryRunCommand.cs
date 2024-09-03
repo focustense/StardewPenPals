@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using GiftMailer.Data;
-using GiftMailer.Logging;
+using PenPals.Data;
+using PenPals.Logging;
 
-namespace GiftMailer.Commands;
+namespace PenPals.Commands;
 
 internal record DryRunArgs();
 

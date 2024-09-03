@@ -1,6 +1,6 @@
 ﻿using StardewValley.Characters;
 
-namespace GiftMailer.Data;
+namespace PenPals.Data;
 
 /// <summary>
 /// Rules for mailing gifts.

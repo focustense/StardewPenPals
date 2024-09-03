@@ -1,13 +1,13 @@
-﻿using GiftMailer.Commands;
-using GiftMailer.Data;
-using GiftMailer.Integrations.Gmcm;
-using GiftMailer.Logging;
-using HarmonyLib;
-using StardewGiftMailer.Integrations;
+﻿using HarmonyLib;
+using PenPals.Commands;
+using PenPals.Data;
+using PenPals.Integrations;
+using PenPals.Integrations.Gmcm;
+using PenPals.Logging;
 using StardewModdingAPI.Events;
 using StardewUI;
 
-namespace GiftMailer;
+namespace PenPals;
 
 internal sealed class ModEntry : Mod
 {

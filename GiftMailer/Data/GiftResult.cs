@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// The result of an NPC receiving a gift by mail.

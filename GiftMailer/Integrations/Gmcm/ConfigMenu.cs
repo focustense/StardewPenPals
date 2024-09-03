@@ -1,7 +1,6 @@
 ﻿using GenericModConfigMenu;
-using StardewGiftMailer.Integrations;
 
-namespace GiftMailer.Integrations.Gmcm;
+namespace PenPals.Integrations.Gmcm;
 
 internal static class ConfigMenu
 {

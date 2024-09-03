@@ -1,7 +1,7 @@
-﻿using GiftMailer.Data;
+﻿using PenPals.Data;
 using StardewUI;
 
-namespace GiftMailer.UI;
+namespace PenPals.UI;
 
 internal class GiftMailMenu(
     ModConfig config,

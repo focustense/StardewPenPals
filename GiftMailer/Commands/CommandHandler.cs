@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Commands;
+﻿namespace PenPals.Commands;
 
 internal class CommandHandler
 {

@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// Top-level data for the mod.

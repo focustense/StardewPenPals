@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// Helper class for distributing outgoing gifts, i.e. making NPCs actually receive them.

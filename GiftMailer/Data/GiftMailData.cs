@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// Player-instanced data about sent gifts.
@@ -7,7 +7,7 @@ public class GiftMailData
 {
     // This is intentionally hardcoded so that if the mod name in the ModManifest ever changes, it
     // doesn't break savegame data.
-    private static readonly string ReturnMailPrefix = "focustense.GiftMail:ReturnedGift_";
+    private static readonly string ReturnMailPrefix = "focustense.PenPals:ReturnedGift_";
 
     /// <summary>
     /// Gets the return ID (key in <see cref="ReturnedGifts"/> dictionary) associated with a

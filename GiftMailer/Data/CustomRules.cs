@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// Gift rules that can be customized in the <c>rules.json</c> or patched by other mods.

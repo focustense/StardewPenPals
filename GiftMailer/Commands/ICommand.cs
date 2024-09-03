@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace GiftMailer.Commands;
+namespace PenPals.Commands;
 
 internal interface ICommand
 {

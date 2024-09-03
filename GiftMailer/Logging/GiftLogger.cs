@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using GiftMailer.Data;
+using PenPals.Data;
 
-namespace GiftMailer.Logging;
+namespace PenPals.Logging;
 
 internal static class GiftLogger
 {

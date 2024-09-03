@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>GiftMailer</AssemblyName>
-        <RootNamespace>GiftMailer</RootNamespace>
+        <AssemblyName>PenPals</AssemblyName>
+        <RootNamespace>PenPals</RootNamespace>
         <Version>0.1.0</Version>
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>Latest</LangVersion>

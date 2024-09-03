@@ -1,4 +1,4 @@
-﻿namespace GiftMailer.Data;
+﻿namespace PenPals.Data;
 
 /// <summary>
 /// A <see cref="ModContext"/> with additional <see cref="MailRules"/> instance, used for operations

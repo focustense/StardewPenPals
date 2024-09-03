@@ -1,6 +1,6 @@
 ﻿using GenericModConfigMenu;
 
-namespace StardewGiftMailer.Integrations;
+namespace PenPals.Integrations;
 
 internal static class Apis
 {

@@ -1,6 +1,6 @@
 ﻿using StardewUI;
 
-namespace GiftMailer.UI;
+namespace PenPals.UI;
 
 /// <summary>
 /// UI-optimized information about an NPC's taste for a particular gift.

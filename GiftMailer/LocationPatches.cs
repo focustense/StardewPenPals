@@ -1,4 +1,4 @@
-﻿namespace GiftMailer;
+﻿namespace PenPals;
 
 internal static class LocationPatches
 {

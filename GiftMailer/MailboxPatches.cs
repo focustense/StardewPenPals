@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Reflection.Emit;
-using GiftMailer.Data;
-using GiftMailer.UI;
 using HarmonyLib;
+using PenPals.Data;
+using PenPals.UI;
 using StardewValley.Menus;
 
-namespace GiftMailer;
+namespace PenPals;
 
 internal static class MailboxPatches
 {

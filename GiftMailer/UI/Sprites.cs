@@ -2,7 +2,7 @@
 using StardewUI;
 using StardewValley.ItemTypeDefinitions;
 
-namespace GiftMailer.UI;
+namespace PenPals.UI;
 
 /// <summary>
 /// Sprites used in the mod UI.

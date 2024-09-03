@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using GiftMailer.Data;
+using PenPals.Data;
 using StardewUI;
 using StardewValley.Menus;
 
-namespace GiftMailer.UI;
+namespace PenPals.UI;
 
 internal class GiftMailView(
     ModConfig config,

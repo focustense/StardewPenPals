@@ -1,10 +1,10 @@
 ﻿{
-  "Name": "Gift Mailer",
+  "Name": "Pen Pals",
   "Author": "focustense",
   "Version": "0.1.0",
   "Description": "Send NPCs gifts by mail",
-  "UniqueID": "focustense.GiftMailer",
-  "EntryDll": "GiftMailer.dll",
+  "UniqueID": "focustense.PenPals",
+  "EntryDll": "PenPals.dll",
   "Dependencies": [
     {
       "UniqueID": "spacechase0.GenericModConfigMenu",
