@@ -1,10 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Reflection.Emit;
-using HarmonyLib;
+﻿using HarmonyLib;
 using PenPals.Data;
 using PenPals.UI;
 using StardewValley.Menus;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace PenPals;
 
