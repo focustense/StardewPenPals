@@ -8,10 +8,11 @@ namespace PenPals.UI;
 /// <remarks>
 /// Neutral gift tastes are generally not shown, and have no predefined data.
 /// </remarks>
-/// <param name="Description">Friendly description to show in the tooltip.</param>
+/// <param name="Description">Friendly description to show in the tooltip; takes the item name as
+/// a format argument.</param>
 /// <param name="Sprite">Emoji sprite representing the NPC's reaction.</param>
 /// <param name="Tint">Tint color to apply to the <paramref name="Sprite"/> for improved visibility.</param>
-public record GiftTasteInfo(string Description, Sprite Sprite, Color Tint)
+public record GiftTasteInfo(Func<string, string> Description, Sprite Sprite, Color Tint)
 {
     /// <summary>
     /// Gift taste for a loved gift.
@@ -34,13 +35,13 @@ public record GiftTasteInfo(string Description, Sprite Sprite, Color Tint)
     public static GiftTasteInfo Hate => hate.Value;
 
     private static readonly Lazy<GiftTasteInfo> love =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Love(), Sprites.EmojiGrin, Color.Cyan));
+        new(() => new(I18n.GiftMailMenu_Tooltip_Love, Sprites.EmojiGrin, Color.Cyan));
     private static readonly Lazy<GiftTasteInfo> like =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Like(), Sprites.EmojiHappy, Color.White));
+        new(() => new(I18n.GiftMailMenu_Tooltip_Like, Sprites.EmojiHappy, Color.White));
     private static readonly Lazy<GiftTasteInfo> dislike =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Dislike(), Sprites.EmojiUnhappy, Color.Orange));
+        new(() => new(I18n.GiftMailMenu_Tooltip_Dislike, Sprites.EmojiUnhappy, Color.Orange));
     private static readonly Lazy<GiftTasteInfo> hate =
-        new(() => new(I18n.GiftMailMenu_Tooltip_Hate(), Sprites.EmojiAngry, Color.Red));
+        new(() => new(I18n.GiftMailMenu_Tooltip_Hate, Sprites.EmojiAngry, Color.Red));
 
     /// <summary>
     /// Gets the info for a gift taste value as obtained from <see cref="NPC.getGiftTasteForThisItem(Item)"/>.

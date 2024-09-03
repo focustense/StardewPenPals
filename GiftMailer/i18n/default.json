@@ -1,11 +1,12 @@
 {
   // Menu text and controls
   "GiftMailMenu.Title": "Send a gift",
-  "GiftMailMenu.Tooltip.Love": "Loves this",
-  "GiftMailMenu.Tooltip.Like": "Likes this",
-  "GiftMailMenu.Tooltip.Dislike": "Dislikes this",
-  "GiftMailMenu.Tooltip.Hate": "Hates this",
+  "GiftMailMenu.Tooltip.Love": "Loves {{itemName}}",
+  "GiftMailMenu.Tooltip.Like": "Likes {{itemName}}",
+  "GiftMailMenu.Tooltip.Dislike": "Dislikes {{itemName}}",
+  "GiftMailMenu.Tooltip.Hate": "Hates {{itemName}}",
   "GiftMailMenu.Tooltip.NonGiftable": "Gift not allowed:",
+  "GiftMailMenu.Tooltip.Pending": "{{itemName}} is on its way",
 
   // Other UI
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",
@@ -48,6 +49,8 @@
   "Enum.NonGiftableReasons.Spouse": "This is your spouse",
   "Enum.NonGiftableReasons.Unmet": "You haven't met this person",
   "Enum.NonGiftableReasons.WeeklyLimit": "You're at the limit for this week",
-  "Hud.Confirm.GiftSent": "Sent {{itemName}} to {{npcName}}",
-  "Hud.Error.ScheduleGift": "Failed to schedule gift send; check the SMAPI log."
+  "Hud.Confirm.GiftSent": "{{itemName}} will be delivered to {{npcName}} {{scheduleName}}",
+  "Hud.Error.ScheduleGift": "Failed to schedule gift send; check the SMAPI log.",
+  "Hud.Schedule.NextDay": "tomorrow",
+  "Hud.Schedule.SameDay": "tonight"
 }

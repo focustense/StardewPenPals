@@ -90,7 +90,11 @@ internal class GiftMailView(
         var tooltipBuilder = new StringBuilder(npc.displayName);
         if (taste is not null)
         {
-            tooltipBuilder.AppendLine().Append('(').Append(taste.Description).Append(')');
+            tooltipBuilder
+                .AppendLine()
+                .Append('(')
+                .Append(taste.Description(who.ActiveItem.DisplayName))
+                .Append(')');
         }
         if (nonGiftableReasons != 0)
         {
@@ -108,15 +112,21 @@ internal class GiftMailView(
             Name = $"{npc.Name}_Panel",
             Layout = LayoutParameters.Fill(),
             Margin = new(8, 8, 8, 5),
-            VerticalContentAlignment = Alignment.End,
             Tooltip = tooltipBuilder.ToString(),
             Tags = Tags.Create(npc, nonGiftableReasons),
             IsFocusable = true,
             Children = [portrait],
         };
         panel.Click += OnNpcClick;
+        Image? tasteImage = null;
         if (taste is not null)
         {
+            tasteImage = new Image()
+            {
+                Layout = LayoutParameters.FixedSize(27, 27),
+                Sprite = taste.Sprite,
+                Tint = taste.Tint,
+            };
             panel.Children.Add(
                 new Panel()
                 {
@@ -124,17 +134,35 @@ internal class GiftMailView(
                     Margin = new(Right: 2, Bottom: 2),
                     HorizontalContentAlignment = Alignment.End,
                     VerticalContentAlignment = Alignment.End,
-                    Children =
-                    [
-                        new Image()
-                        {
-                            Layout = LayoutParameters.FixedSize(27, 27),
-                            Sprite = taste.Sprite,
-                            Tint = taste.Tint,
-                        },
-                    ],
+                    Children = [tasteImage],
                 }
             );
+        }
+        if (data.OutgoingGifts.TryGetValue(npc.Name, out var pendingGift))
+        {
+            panel.Children.Add(
+                new Image()
+                {
+                    Layout = LayoutParameters.FixedSize(32, 32),
+                    Margin = new(Left: 2, Bottom: 2),
+                    Sprite = Sprites.Item(pendingGift),
+                    ShadowAlpha = 0.25f,
+                    ShadowOffset = new(-2, 2),
+                }
+            );
+            if (nonGiftableReasons == 0)
+            {
+                portrait.Tint = new(Color.DimGray, 0.35f);
+                if (tasteImage is not null)
+                {
+                    tasteImage.Tint = new(Color.DarkGray, 0.7f);
+                }
+            }
+            panel.Tooltip = tooltipBuilder
+                .AppendLine()
+                .AppendLine()
+                .Append(I18n.GiftMailMenu_Tooltip_Pending(pendingGift.DisplayName))
+                .ToString();
         }
         return new Frame()
         {
@@ -144,6 +172,7 @@ internal class GiftMailView(
                 Sprites.PortraitFrame.Size.Y * 2
             ),
             Background = Sprites.PortraitFrame,
+            BackgroundTint = pendingGift is not null ? new(0.8f, 1.0f, 0.8f) : Color.White,
             Content = panel,
         };
     }
@@ -191,7 +220,7 @@ internal class GiftMailView(
         {
             Name = "ItemSelectorFrame",
             Layout = LayoutParameters.FixedSize(96, 96),
-            Background = Sprites.ControlBorder,
+            Background = UiSprites.ControlBorder,
             VerticalContentAlignment = Alignment.Middle,
             Content = itemImagePanel,
         };
@@ -317,7 +346,11 @@ internal class GiftMailView(
         Game1.exitActiveMenu();
         Game1.addHUDMessage(
             HUDMessage.ForCornerTextbox(
-                I18n.Hud_Confirm_GiftSent(item.DisplayName, npc.displayName)
+                I18n.Hud_Confirm_GiftSent(
+                    item.DisplayName,
+                    npc.displayName,
+                    I18n.GetByKey($"Hud.Schedule.{config.Scheduling}")
+                )
             )
         );
     }
