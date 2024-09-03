@@ -87,6 +87,8 @@ If you hate the socialization aspect of the game and see it as an unnecessary ob
 
 Conversely, if you got here because you _love_ NPCs and are continuously adding more of them and simply cannot get to them all, and only want to use gift-mailing as an emergency backup for "oh no, I forgot it was so-and-so's birthday today and it's 12:30 am and I _really_ don't want to restart the day" moments, and you have no interest in attempting Y1 Perfection or even Y1 Max Hearts, then feel free to adjust the scale _down_. There is no harm in doing so, and it won't break any vanilla balance because it is an optional add-on.
 
+**Note:** Pen Pals adds one unique twist to the scaling: only _positive_ results are scaled down. If you mail disliked or hated gifts, you will lose the same points that you'd lose face-to-face. After all, wouldn't _you_ be upset if metaphorical Santa left a lump of coal in _your_ metaphorical stocking?
+
 ## Configuration
 
 All of this mod's options are configurable through GMCM. If you prefer to edit the `config.json` or are having any trouble with the in-game settings, read on for a detailed explanation of what the settings do.
