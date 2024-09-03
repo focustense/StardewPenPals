@@ -86,17 +86,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void GameLoop_DayStarted(object? sender, DayStartedEventArgs e)
-    {
-        if (config.Scheduling != GiftShipmentScheduling.NextDay)
-        {
-            return;
-        }
-        var distributor = GetGiftDistributor();
-        var results = distributor.ReceiveAll();
-        GiftLogger.LogResults(results, "Start-of-Day Gift Results:", Monitor, LogLevel.Debug);
-    }
-
     private void GameLoop_DayEnding(object? sender, DayEndingEventArgs e)
     {
         if (config.Scheduling != GiftShipmentScheduling.SameDay)
@@ -106,6 +95,17 @@ internal sealed class ModEntry : Mod
         var distributor = GetGiftDistributor();
         var results = distributor.ReceiveAll();
         GiftLogger.LogResults(results, "End-of-Day Gift Results:", Monitor, LogLevel.Debug);
+    }
+
+    private void GameLoop_DayStarted(object? sender, DayStartedEventArgs e)
+    {
+        if (config.Scheduling != GiftShipmentScheduling.NextDay)
+        {
+            return;
+        }
+        var distributor = GetGiftDistributor();
+        var results = distributor.ReceiveAll();
+        GiftLogger.LogResults(results, "Start-of-Day Gift Results:", Monitor, LogLevel.Debug);
     }
 
     private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
