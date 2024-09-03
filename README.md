@@ -85,7 +85,7 @@ Mailed gifts are there to _supplement_ your in-person gift giving during periods
 
 If you hate the socialization aspect of the game and see it as an unnecessary obstacle on the path to Perfection, or an initially cute and heartwarming aspect of the game that ceased to be cute and heartwarming after the 84th repetition, then feel free to bump the scale all the way up to 1.0 and go Full Hermit; I salute you. Keep in mind that there are certain progression items (crafting, recipes) gated behind relationships, and using a high scale will affect the overall progression in some less-than-subtle ways.
 
-Similarly, if you got here because you _love_ NPCs and are continuously adding more of them and simply cannot get to them all, and only want to use gift-mailing as an emergency backup for "oh no, I forgot it was so-and-so's birthday today and it's 12:30 am and I _really_ don't want to restart the day" moments, and you have no interest in attempting Y1 Perfection or even Y1 Max Hearts, then feel free to adjust the scale _down_. There is no harm in doing so, and it won't break any vanilla balance because it is an optional add-on.
+Conversely, if you got here because you _love_ NPCs and are continuously adding more of them and simply cannot get to them all, and only want to use gift-mailing as an emergency backup for "oh no, I forgot it was so-and-so's birthday today and it's 12:30 am and I _really_ don't want to restart the day" moments, and you have no interest in attempting Y1 Perfection or even Y1 Max Hearts, then feel free to adjust the scale _down_. There is no harm in doing so, and it won't break any vanilla balance because it is an optional add-on.
 
 ## Configuration
 
@@ -113,7 +113,7 @@ Describe the individual configuration attributes below (and delete this line).
 * `DetailedReturnReasons`: Whether to show the exact reason why a gift was returned in the [return mail](#returns). Valid values are `true` or `false`.
 * `FriendshipMultiplier`: Scales down the friendship gain when a gift is mailed, compared to an in-person gift. This can be any numeric value, but see [Balance](#balance) for details.
 * `GiftTasteVisibility`: When to show gift tastes for NPCs in the gift-mail menu. Valid values are:
-  * `All` - always show gift tastes for all combinations of NPC and gift item regardless of game progression. Recommended for veteran/challenge players.
+  * `All` - always show gift tastes for all combinations of NPC and gift item regardless of game progression. Recommended for veteran/challenge players unconcerned about spoilers.
   * `Known` - only show gift tastes that would also be visible on the NPC's profile page, i.e. those discovered through previous gifting or via dialogue, Secret Note, etc.
   * `None` - never show gift tastes. For those who are way past "veteran" and have every gift taste memorized, and don't want the emojis cluttering up the UI.
 
@@ -124,6 +124,7 @@ Describe the individual configuration attributes below (and delete this line).
 * `Scheduling`: Can be either `"SameDay"` (default) or `"NextDay"`. In both cases, NPCs will receive their gifts after you go to sleep or pass out, but:
   * `SameDay` means NPCs will receive their gifts _before_ the calendar date rolls over to the next day; i.e. on the same date the mail was posted. This is easier to understand and work with: the rules for mailed gifts are identical to the rules for face-to-face; gifts sent on the NPC's birthday will receive the birthday bonus; and so on. However, it is not very realistic for someone to be opening their mail at 3 AM, never mind a postal carrier delivering it at that time, and some players may find this awkward or immersion-breaking.
   * `NextDay` means NPCs will receive their gifts _after_ the calendar date rolls over, i.e. on the next morning, which is the same time you would check your own mail and receive one of theirs. However, it is more challenging because it requires planning ahead: birthday gifts must be sent on the day _before_ an NPC's birthday in order to get the bonus; gifting-related quests may expire before the final gifts go out; and the "mail gifting" week restarts on Saturday, since the gift would actually be received on Sunday.
+  * Choose based on your personal preference for gritty realism vs. intuitive gameplay.
 
 
 ## See Also
