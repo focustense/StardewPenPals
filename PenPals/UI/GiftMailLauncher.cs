@@ -102,6 +102,7 @@ internal class GiftMailLauncher(
             .Where(recipient => recipient is not null)
             .Cast<RecipientViewModel>()
             .OrderByDescending(recipient => recipient.IsEnabled)
+            .ThenBy(recipient => recipient.HasPendingGift)
             .ToList();
         var sender = new GiftSender(who, giftObject, config, giftMailData, monitor);
         return new(gift, recipients, sender);
