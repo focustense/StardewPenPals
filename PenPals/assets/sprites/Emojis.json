@@ -1,0 +1,18 @@
+{
+    "Texture": "LooseSprites/emojis",
+    "Sprites": {
+      "Angry": {
+        "SourceRect": "0, 9, 9, 9"
+      },
+      "Grin": {
+          "SourceRect": "9, 0, 9, 9"
+      },
+      "Happy": {
+          "SourceRect": "0, 0, 9, 9"
+      },
+      "Unhappy": {
+          "SourceRect": "108, 0, 9, 9"
+      }
+    }
+  }
+  

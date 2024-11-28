@@ -1,0 +1,18 @@
+{
+  "Texture": "LooseSprites/Cursors",
+  "Sprites": {
+    "PortraitFrame": {
+      "SourceRect": "603, 414, 74, 74",
+      "FixedEdges": "5"
+    },
+    "QualityStarGold": {
+        "SourceRect": "346, 400, 8, 8"
+    },
+    "QualityStarIridium": {
+        "SourceRect": "346, 392, 8, 8"
+    },
+    "QualityStarSilver": {
+        "SourceRect": "338, 400, 8, 8"
+    }
+  }
+}

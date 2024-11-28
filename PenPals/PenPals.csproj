@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>PenPals</AssemblyName>
         <RootNamespace>PenPals</RootNamespace>
@@ -20,10 +20,16 @@
       <Content Include="assets\rules.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+        <Content Include="assets\sprites\Cursors.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="assets\sprites\Emojis.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CSharpier.MsBuild" Version="0.29.1">
+        <PackageReference Include="CSharpier.MsBuild" Version="0.30.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -33,7 +39,11 @@
         </PackageReference>
     </ItemGroup>
 
-    <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
+    <ProjectExtensions>
+        <VisualStudio>
+            <UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" />
+        </VisualStudio>
+    </ProjectExtensions>
 
     <ItemGroup>
     <Using Include="StardewValley" />
