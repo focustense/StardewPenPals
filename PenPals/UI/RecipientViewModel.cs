@@ -78,9 +78,9 @@ public class RecipientViewModel(
     /// Color tint to apply to the reaction sprite, if displaying a <see cref="Reaction"/>.
     /// </summary>
     public Color ReactionTint { get; } =
-        pendingGift is not null && nonGiftableReasons == 0
-            ? new(Color.DarkGray, 0.7f)
-            : GetTasteTint(taste);
+        nonGiftableReasons != 0
+            ? new(Color.DarkGray, 0.5f)
+            : GetTasteTint(taste) * (pendingGift is not null ? 0.7f : 1f);
 
     /// <summary>
     /// Localized tooltip including the <see cref="Name"/>, <see cref="Reaction"/> and item name.
