@@ -12,7 +12,7 @@
                horizontal-content-alignment="middle"
                vertical-content-alignment="middle"
                background={@Mods/StardewUI/Sprites/ControlBorder}>
-            <item />
+            <item star-layout="24px" />
         </frame>
         <image margin="16, 0, 0, 0"
                sprite={@Mods/StardewUI/Sprites/CaretRight} />
@@ -60,7 +60,7 @@
                    *context={PendingGift}
                    layout="32px"
                    margin="2, 0, 0, 2">
-                <item />
+                <item star-layout="12px" />
             </frame>
         </panel>
     </frame>
@@ -69,6 +69,7 @@
 <template name="item">
     <panel *context={Image}
            layout="stretch"
+           vertical-content-alignment="end"
            tooltip={Item}>
         <image layout="stretch"
                sprite={Sprite}
@@ -78,12 +79,10 @@
         <image *if={HasTintSprite}
                sprite={TintSprite}
                tint={TintSpriteColor} />
-        <frame *switch={^Quality}
-               layout={&star-layout}
-               margin="2, 0">
-            <image *case="1" layout="stretch" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarSilver} />
-            <image *case="2" layout="stretch" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarGold} />
-            <image *case="4" layout="stretch" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarIridium} />
+        <frame *switch={^Quality} layout={&star-layout}>
+            <image *case="1" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarSilver} />
+            <image *case="2" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarGold} />
+            <image *case="4" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarIridium} />
         </frame>
     </panel>
 </template>
