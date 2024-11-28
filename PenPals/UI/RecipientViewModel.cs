@@ -30,14 +30,24 @@ public class RecipientViewModel(
         pendingGift is not null ? new(0.8f, 1.0f, 0.8f) : Color.White;
 
     /// <summary>
-    /// Whether or not the recipient has a <see cref="PendingGift"/>.
+    /// Whether the recipient has a <see cref="PendingGift"/>.
     /// </summary>
     public bool HasPendingGift => PendingGift is not null;
+
+    /// <summary>
+    /// Whether the recipient can be selected for receiving the gift.
+    /// </summary>
+    public bool IsEnabled { get; } = nonGiftableReasons == 0;
 
     /// <summary>
     /// Name of the recipient (NPC).
     /// </summary>
     public string Name { get; } = npc.displayName;
+
+    /// <summary>
+    /// The original NPC data.
+    /// </summary>
+    public NPC Npc { get; } = npc;
 
     /// <summary>
     /// The previous gift already scheduled (but not yet sent/received) for this recipient. Can be
@@ -89,7 +99,11 @@ public class RecipientViewModel(
         var sb = new StringBuilder(npcName);
         if (taste.HasValue)
         {
-            sb.AppendLine().Append('(').Append(taste.Value.GetDescription(itemName)).Append(')');
+            string tasteDescription = taste.Value.GetDescription(itemName);
+            if (!string.IsNullOrEmpty(tasteDescription))
+            {
+                sb.AppendLine().Append('(').Append(tasteDescription).Append(')');
+            }
         }
         if (nonGiftableReasons != 0)
         {

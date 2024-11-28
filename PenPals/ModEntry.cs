@@ -127,7 +127,8 @@ internal sealed class ModEntry : Mod
             viewEngine,
             () => config,
             () => data,
-            GetCustomRules
+            GetCustomRules,
+            Monitor
         );
 #endif
     }
@@ -151,11 +152,6 @@ internal sealed class ModEntry : Mod
     {
         var context = GetRulesContext();
         return new(context, Helper.GameContent);
-    }
-
-    private ModContext GetModContext()
-    {
-        return new(ModManifest, config, data, Monitor);
     }
 
     private RulesContext GetRulesContext()

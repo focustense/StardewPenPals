@@ -7,25 +7,24 @@
             text={#GiftMailMenu.Title} />
     <lane layout="stretch" vertical-content-alignment="middle">
         <frame *context={Gift}
-               layout="96px"
-               padding="16"
+               layout="84px"
+               padding="20"
                horizontal-content-alignment="middle"
                vertical-content-alignment="middle"
                background={@Mods/StardewUI/Sprites/ControlBorder}>
             <item />
         </frame>
-        <image margin="16, 0"
+        <image margin="16, 0, 0, 0"
                sprite={@Mods/StardewUI/Sprites/CaretRight} />
         <frame layout="stretch"
                background={@Mods/StardewUI/Sprites/MenuBackground}
                border={@Mods/StardewUI/Sprites/MenuBorder}
-               border-thickness="36, 36, 40, 36"
-               padding="8">
+               border-thickness="36, 36, 40, 36">
             <scrollable layout="stretch">
                 <grid layout="stretch content"
-                      item-layout="length: 168"
+                      item-layout="length: 140"
                       item-spacing="16, 16"
-                      padding="18"
+                      padding="16, 16, 16, 0"
                       horizontal-item-alignment="middle">
                     <recipient *repeat={Recipients} />
                 </grid>
@@ -37,14 +36,13 @@
 </lane>
 
 <template name="recipient">
-    <frame layout="168px"
-           background={@Mods/focustense.PenPals/Sprites/Cursors:PortraitFrame}
+    <frame background={@Mods/focustense.PenPals/Sprites/Cursors:PortraitFrame}
            background-tint={BackgroundTint}>
-        <panel layout="stretch"
-               margin="8, 8, 8, 5"
+        <panel margin="8, 8, 8, 5"
                tooltip={TooltipText}
-               focusable="true">
-            <image layout="stretch"
+               focusable="true"
+               click=|^SelectRecipient(this)|>
+            <image layout="128px"
                    vertical-alignment="end"
                    sprite={Portrait}
                    tint={PortraitTint} />

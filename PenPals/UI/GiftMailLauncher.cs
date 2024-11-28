@@ -6,7 +6,8 @@ internal class GiftMailLauncher(
     IViewEngine viewEngine,
     Func<ModConfig> configSelector,
     Func<ModData> dataSelector,
-    Func<CustomRules> customRulesSelector
+    Func<CustomRules> customRulesSelector,
+    IMonitor monitor
 )
 {
     public bool Launch(Farmer who)
@@ -23,7 +24,7 @@ internal class GiftMailLauncher(
         return true;
     }
 
-    private static GiftTaste? GetGiftTaste(Farmer who, NPC npc, Item item, ModConfig config)
+    private static GiftTaste? GetGiftTaste(Farmer who, NPC npc, Item? item, ModConfig config)
     {
         if (
             item is null
@@ -100,7 +101,9 @@ internal class GiftMailLauncher(
             .Select(npc => TryCreateRecipient(who, npc, giftObject, config, giftMailData, rules))
             .Where(recipient => recipient is not null)
             .Cast<RecipientViewModel>()
+            .OrderByDescending(recipient => recipient.IsEnabled)
             .ToList();
-        return new(gift, recipients);
+        var sender = new GiftSender(who, giftObject, config, giftMailData, monitor);
+        return new(gift, recipients, sender);
     }
 }
