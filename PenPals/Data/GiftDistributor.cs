@@ -24,7 +24,7 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
         bool hasReturns = false;
         foreach (var (playerId, giftData) in data.FarmerGiftMail)
         {
-            var farmer = Game1.getFarmerMaybeOffline(playerId);
+            var farmer = Game1.GetPlayer(playerId);
             if (farmer is null)
             {
                 monitor.Log($"Farmer ID {playerId} not found; skipping gifts.", LogLevel.Error);

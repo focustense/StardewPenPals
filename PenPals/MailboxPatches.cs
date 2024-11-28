@@ -11,11 +11,8 @@ namespace PenPals;
 internal static class MailboxPatches
 {
     // Must be set in ModEntry
-    public static Func<ModConfig> ConfigSelector { get; set; } = null!;
-    public static Func<CustomRules> CustomRulesSelector { get; set; } = null!;
     public static Func<ModData> DataSelector { get; set; } = null!;
-    public static IManifest ModManifest { get; set; } = null!;
-    public static IMonitor Monitor { get; set; } = null!;
+    public static GiftMailLauncher GiftMailLauncher { get; set; } = null!;
 
     [SuppressMessage(
         "Style",
@@ -107,39 +104,6 @@ internal static class MailboxPatches
 
     private static bool MaybeShowGiftMailMenu()
     {
-        var giftObject = Game1.player.ActiveObject;
-        if (giftObject is null || !giftObject.canBeGivenAsGift())
-        {
-            return false;
-        }
-        var config = ConfigSelector();
-        if (
-            config.RequireQuestCompletion
-            && !Game1.player.hasSeenActiveDialogueEvent("questComplete_25")
-        )
-        {
-            return false;
-        }
-        var customRules = CustomRulesSelector();
-        if (customRules.Blacklist.Contains(giftObject.QualifiedItemId))
-        {
-            return false;
-        }
-        var data = DataSelector();
-        var farmerId = Game1.player.UniqueMultiplayerID;
-        if (!data.FarmerGiftMail.TryGetValue(farmerId, out var giftMailData))
-        {
-            giftMailData = new();
-            data.FarmerGiftMail.Add(farmerId, giftMailData);
-        }
-        var rules = new MailRules(config, customRules);
-        Game1.activeClickableMenu = new GiftMailMenu(
-            config,
-            giftMailData,
-            rules,
-            Game1.player,
-            Monitor
-        );
-        return true;
+        return GiftMailLauncher.Launch(Game1.player);
     }
 }

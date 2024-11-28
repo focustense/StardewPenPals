@@ -4,8 +4,8 @@ using PenPals.Data;
 using PenPals.Integrations;
 using PenPals.Integrations.Gmcm;
 using PenPals.Logging;
+using PenPals.UI;
 using StardewModdingAPI.Events;
-using StardewUI;
 
 namespace PenPals;
 
@@ -17,6 +17,7 @@ internal sealed class ModEntry : Mod
 
     // Initialized in Entry
     private ModConfig config = null!;
+    private IViewEngine viewEngine = null!;
 
     // Reloaded on save
     private ModData data = new();
@@ -26,8 +27,6 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         config = helper.ReadConfig<ModConfig>();
 
-        Logger.Monitor = Monitor;
-
         Helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
         Helper.Events.GameLoop.DayEnding += GameLoop_DayEnding;
         Helper.Events.GameLoop.DayStarted += GameLoop_DayStarted;
@@ -35,11 +34,6 @@ internal sealed class ModEntry : Mod
         Helper.Events.GameLoop.Saving += GameLoop_Saving;
         Helper.Events.Content.AssetRequested += Content_AssetRequested;
 
-        MailboxPatches.ConfigSelector = () => config;
-        MailboxPatches.CustomRulesSelector = GetCustomRules;
-        MailboxPatches.DataSelector = () => data;
-        MailboxPatches.ModManifest = ModManifest;
-        MailboxPatches.Monitor = Monitor;
         var harmony = new Harmony(ModManifest.UniqueID);
         harmony.Patch(
             AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
@@ -117,6 +111,25 @@ internal sealed class ModEntry : Mod
             reset: () => config = new(),
             save: () => Helper.WriteConfig(config)
         );
+
+        viewEngine =
+            Helper.ModRegistry.GetApi<IViewEngine>("focustense.StardewUI")
+            ?? throw new InvalidOperationException(
+                "StardewUI Framework is not installed; most Pen Pals functions will be disabled."
+            );
+        viewEngine.RegisterSprites($"Mods/{ModManifest.UniqueID}/Sprites", "assets/sprites");
+        viewEngine.RegisterViews($"Mods/{ModManifest.UniqueID}/Views", "assets/views");
+#if DEBUG
+        viewEngine.EnableHotReloadingWithSourceSync();
+
+        MailboxPatches.DataSelector = () => data;
+        MailboxPatches.GiftMailLauncher = new GiftMailLauncher(
+            viewEngine,
+            () => config,
+            () => data,
+            GetCustomRules
+        );
+#endif
     }
 
     private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)

@@ -19,7 +19,7 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
         var results = new List<GiftResult>();
         foreach (var (playerId, giftData) in context.Data.FarmerGiftMail)
         {
-            var farmer = Game1.getFarmerMaybeOffline(playerId);
+            var farmer = Game1.GetPlayer(playerId);
             if (farmer is null)
             {
                 context.Monitor.Log($"Could not find Farmer with ID: {playerId}", LogLevel.Error);
