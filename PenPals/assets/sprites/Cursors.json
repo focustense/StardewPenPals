@@ -3,7 +3,8 @@
   "Sprites": {
     "PortraitFrame": {
       "SourceRect": "603, 414, 74, 74",
-      "FixedEdges": "5"
+      "FixedEdges": "5",
+      "Scale": 2
     },
     "QualityStarGold": {
         "SourceRect": "346, 400, 8, 8"

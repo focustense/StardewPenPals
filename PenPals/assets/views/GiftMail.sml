@@ -1,4 +1,4 @@
-<lane layout="82%[1200..] 80%[800..]"
+<lane layout="85%[1200..] 80%[800..]"
       orientation="vertical"
       horizontal-content-alignment="middle">
     <banner background={@Mods/StardewUI/Sprites/BannerBackground}
@@ -22,7 +22,7 @@
                border-thickness="36, 36, 40, 36">
             <scrollable layout="stretch">
                 <grid layout="stretch content"
-                      item-layout="length: 140"
+                      item-layout="length: 160"
                       item-spacing="16, 16"
                       padding="16, 16, 16, 0"
                       horizontal-item-alignment="middle">
@@ -38,7 +38,7 @@
 <template name="recipient">
     <frame background={@Mods/focustense.PenPals/Sprites/Cursors:PortraitFrame}
            background-tint={BackgroundTint}>
-        <panel margin="8, 8, 8, 5"
+        <panel margin="16, 16, 16, 10"
                tooltip={TooltipText}
                focusable="true"
                click=|^SelectRecipient(this)|>
