@@ -6,7 +6,7 @@
             padding="12"
             text={#GiftMailMenu.Title} />
     <lane layout="stretch" vertical-content-alignment="middle">
-        <frame *context={Gift}
+        <frame *context={:Gift}
                layout="84px"
                padding="20"
                horizontal-content-alignment="middle"
@@ -26,7 +26,7 @@
                       item-spacing="16, 16"
                       padding="16, 16, 16, 0"
                       horizontal-item-alignment="middle">
-                    <recipient *repeat={Recipients} />
+                    <recipient *repeat={:Recipients} />
                 </grid>
             </scrollable>
         </frame>
@@ -37,16 +37,16 @@
 
 <template name="recipient">
     <frame background={@Mods/focustense.PenPals/Sprites/Cursors:PortraitFrame}
-           background-tint={BackgroundTint}>
+           background-tint={:BackgroundTint}>
         <panel margin="16, 16, 16, 10"
-               tooltip={TooltipText}
+               tooltip={:TooltipText}
                focusable="true"
                click=|^SelectRecipient(this)|>
             <image layout="128px"
                    vertical-alignment="end"
-                   sprite={Portrait}
-                   tint={PortraitTint} />
-            <panel *switch={Reaction}
+                   sprite={:Portrait}
+                   tint={:PortraitTint} />
+            <panel *switch={:Reaction}
                    layout="stretch"
                    margin="0, 0, 2, 2"
                    horizontal-content-alignment="end"
@@ -56,8 +56,8 @@
                 <reaction *case="Dislike" sprite={@Mods/focustense.PenPals/Sprites/Emojis:Unhappy} />
                 <reaction *case="Hate" sprite={@Mods/focustense.PenPals/Sprites/Emojis:Angry} />
             </panel>
-            <frame *if={HasPendingGift}
-                   *context={PendingGift}
+            <frame *if={:HasPendingGift}
+                   *context={:PendingGift}
                    layout="32px"
                    margin="2, 0, 0, 2">
                 <item star-layout="12px" />
@@ -67,19 +67,19 @@
 </template>
 
 <template name="item">
-    <panel *context={Image}
+    <panel *context={:Image}
            layout="stretch"
            vertical-content-alignment="end"
-           tooltip={Item}>
+           tooltip={:Item}>
         <image layout="stretch"
-               sprite={Sprite}
-               tint={SpriteColor}
+               sprite={:Sprite}
+               tint={:SpriteColor}
                shadow-alpha="0.25"
                shadow-offset="-2, 2" />
-        <image *if={HasTintSprite}
-               sprite={TintSprite}
-               tint={TintSpriteColor} />
-        <frame *switch={^Quality} layout={&star-layout}>
+        <image *if={:HasTintSprite}
+               sprite={:TintSprite}
+               tint={:TintSpriteColor} />
+        <frame *switch={:^Quality} layout={&star-layout}>
             <image *case="1" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarSilver} />
             <image *case="2" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarGold} />
             <image *case="4" layout="stretch content" sprite={@Mods/focustense.PenPals/Sprites/Cursors:QualityStarIridium} />
@@ -88,5 +88,5 @@
 </template>
 
 <template name="reaction">
-    <image layout="27px" sprite={&sprite} tint={ReactionTint} />
+    <image layout="27px" sprite={&sprite} tint={:ReactionTint} />
 </template>
