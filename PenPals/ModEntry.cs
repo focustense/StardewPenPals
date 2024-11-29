@@ -121,7 +121,7 @@ internal sealed class ModEntry : Mod
         viewEngine.RegisterViews($"Mods/{ModManifest.UniqueID}/Views", "assets/views");
 #if DEBUG
         viewEngine.EnableHotReloadingWithSourceSync();
-
+#endif
         MailboxPatches.DataSelector = () => data;
         MailboxPatches.GiftMailLauncher = new GiftMailLauncher(
             viewEngine,
@@ -130,7 +130,6 @@ internal sealed class ModEntry : Mod
             GetCustomRules,
             Monitor
         );
-#endif
     }
 
     private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)

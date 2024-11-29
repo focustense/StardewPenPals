@@ -13,7 +13,6 @@ public class GiftMailData
     /// Gets the return ID (key in <see cref="ReturnedGifts"/> dictionary) associated with a
     /// specified mail piece.
     /// </summary>
-    /// <param name="mod">Manifest for this mod.</param>
     /// <param name="mailTitle">The title/key of the mail piece in the mailbox.</param>
     /// <returns>The return ID associated with the mail piece, or <c>null</c> if it does not appear
     /// to be a gift-return mail.</returns>
@@ -25,7 +24,6 @@ public class GiftMailData
     /// <summary>
     /// Gets a mail key for a returned gift.
     /// </summary>
-    /// <param name="mod">Manifest for this mod.</param>
     /// <param name="returnId">Return ID; the key in the <see cref="ReturnedGifts"/> dictionary.</param>
     /// <returns>Mail key for the specified return.</returns>
     public static string GetReturnMailKey(string returnId)
