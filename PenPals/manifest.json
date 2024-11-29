@@ -1,7 +1,8 @@
 ﻿{
+  "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Pen Pals",
   "Author": "focustense",
-  "Version": "0.1.0",
+  "Version": "0.2.0",
   "Description": "Send NPCs gifts by mail",
   "UniqueID": "focustense.PenPals",
   "EntryDll": "PenPals.dll",
@@ -15,6 +16,7 @@
       "IsRequired": false
     }
   ],
-  "MinimumApiVersion": "4.0.5",
+  "MinimumApiVersion": "4.1.7",
+  "MinimumGameVersion": "1.6.14",
   "UpdateKeys": [ "Nexus:27489", "GitHub:focustense/StardewPenPals" ]
 }
