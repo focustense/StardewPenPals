@@ -7,6 +7,9 @@
   "GiftMailMenu.Tooltip.Hate": "Hates {{itemName}}",
   "GiftMailMenu.Tooltip.NonGiftable": "Gift not allowed:",
   "GiftMailMenu.Tooltip.Pending": "{{itemName}} is on its way",
+  "GiftMailMenu.Tooltip.Birthday.Today": "It's {{npcName}}'s birthday today!",
+  "GiftMailMenu.Tooltip.Birthday.Later": "Gifts sent today will arrive on {{npcName}}'s birthday.",
+  "GiftMailMenu.Tooltip.Quest.Description": "Deliver {{requiredCount}} {{itemName}} to complete this quest.\n(You have {{heldCount}} in your inventory.)",
 
   // Other UI
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",

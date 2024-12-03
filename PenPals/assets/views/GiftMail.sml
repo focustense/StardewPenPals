@@ -56,12 +56,28 @@
                 <reaction *case="Dislike" sprite={@Mods/focustense.PenPals/Sprites/Emojis:Unhappy} />
                 <reaction *case="Hate" sprite={@Mods/focustense.PenPals/Sprites/Emojis:Angry} />
             </panel>
-            <frame *if={:HasPendingGift}
-                   *context={:PendingGift}
-                   layout="32px"
-                   margin="2, 0, 0, 2">
-                <item star-layout="12px" />
-            </frame>
+            <lane>
+                <frame *if={:HasPendingGift}
+                       *context={:PendingGift}
+                       layout="32px"
+                       margin="2, 0, 2, 2">
+                    <item star-layout="12px" />
+                </frame>
+                <image *if={:HasPendingQuest}
+                       layout="32px"
+                       margin="2, 0, 2, 0"
+                       sprite={@Mods/focustense.PenPals/Sprites/Cursors:QuestButton}
+                       shadow-alpha="0.25"
+                       shadow-offset="-2, 2"
+                       tooltip={:PendingQuest} />
+                <image *if={:HasBirthday}
+                       layout="32px"
+                       margin="2, 0, 2, 0"
+                       sprite={@Mods/focustense.PenPals/Sprites/Cursors:Balloon}
+                       shadow-alpha="0.25"
+                       shadow-offset="-2, 2"
+                       tooltip={:BirthdayTooltip} />
+            </lane>
         </panel>
     </frame>
 </template>

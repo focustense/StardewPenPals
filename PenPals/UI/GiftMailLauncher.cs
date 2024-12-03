@@ -47,7 +47,8 @@ internal class GiftMailLauncher(
         Item item,
         ModConfig config,
         GiftMailData data,
-        MailRules rules
+        MailRules rules,
+        WorldDate deliveryDate
     )
     {
         var nonGiftableReasons = rules.CheckGiftability(who, npc, item);
@@ -66,7 +67,18 @@ internal class GiftMailLauncher(
         var pendingGift = data.OutgoingGifts.TryGetValue(npc.Name, out var pendingItem)
             ? new GiftItemViewModel(pendingItem)
             : null;
-        return new RecipientViewModel(npc, item, taste, nonGiftableReasons, pendingGift);
+        var pendingQuest = Game1.questOfTheDay is { } quest
+            ? ItemQuestInfo.TryFromQuest(quest, who, npc)
+            : null;
+        return new RecipientViewModel(
+            npc,
+            item,
+            taste,
+            nonGiftableReasons,
+            pendingGift,
+            pendingQuest,
+            deliveryDate
+        );
     }
 
     private GiftMailViewModel? TryCreateViewModel(Farmer who)
@@ -95,10 +107,16 @@ internal class GiftMailLauncher(
         }
         var rules = new MailRules(config, customRules);
         var gift = new GiftItemViewModel(giftObject);
+        var deliveryDate =
+            config.Scheduling == GiftShipmentScheduling.SameDay
+                ? Game1.Date
+                : WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1);
         var recipients = Game1
             .characterData.Keys.Select(name => Game1.getCharacterFromName(name))
             .Where(npc => npc is not null)
-            .Select(npc => TryCreateRecipient(who, npc, giftObject, config, giftMailData, rules))
+            .Select(npc =>
+                TryCreateRecipient(who, npc, giftObject, config, giftMailData, rules, deliveryDate)
+            )
             .Where(recipient => recipient is not null)
             .Cast<RecipientViewModel>()
             .OrderByDescending(recipient => recipient.IsEnabled)

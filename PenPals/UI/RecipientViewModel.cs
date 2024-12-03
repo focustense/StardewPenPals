@@ -15,12 +15,17 @@ namespace PenPals.UI;
 /// <paramref name="item"/> cannot currently be gifted to the <paramref name="npc"/>.</param>
 /// <param name="pendingGift">The previous gift already scheduled (but not yet sent/received) for
 /// this recipient. Can be swapped or cancelled.</param>
+/// <param name="pendingQuest">Details of any pending delivery quest for the recipient.</param>
+/// <param name="deliveryDate">The date on which the item will actually be delivered, generally the
+/// current date or next day depending on mod configuration.</param>
 public class RecipientViewModel(
     NPC npc,
     Item item,
     GiftTaste? taste,
     NonGiftableReasons nonGiftableReasons,
-    GiftItemViewModel? pendingGift
+    GiftItemViewModel? pendingGift,
+    ItemQuestInfo? pendingQuest,
+    WorldDate deliveryDate
 )
 {
     /// <summary>
@@ -30,9 +35,31 @@ public class RecipientViewModel(
         pendingGift is not null ? new(0.8f, 1.0f, 0.8f) : Color.White;
 
     /// <summary>
+    /// Tooltip to display relating to birthday gifting, if applicable.
+    /// </summary>
+    public string? BirthdayTooltip =>
+        HasBirthday
+            ? deliveryDate == Game1.Date
+                ? I18n.GiftMailMenu_Tooltip_Birthday_Today(Npc.displayName)
+                : I18n.GiftMailMenu_Tooltip_Birthday_Later(Npc.displayName)
+            : null;
+
+    /// <summary>
+    /// Whether the NPC has a birthday today.
+    /// </summary>
+    public bool HasBirthday { get; } =
+        npc.Birthday_Season == deliveryDate.SeasonKey
+        && npc.Birthday_Day == deliveryDate.DayOfMonth;
+
+    /// <summary>
     /// Whether the recipient has a <see cref="PendingGift"/>.
     /// </summary>
     public bool HasPendingGift => PendingGift is not null;
+
+    /// <summary>
+    /// Whether the recipient has a <see cref="PendingQuest"/>.
+    /// </summary>
+    public bool HasPendingQuest => PendingQuest is not null;
 
     /// <summary>
     /// Whether the recipient can be selected for receiving the gift.
@@ -54,6 +81,11 @@ public class RecipientViewModel(
     /// swapped or cancelled.
     /// </summary>
     public GiftItemViewModel? PendingGift { get; } = pendingGift;
+
+    /// <summary>
+    /// Details about the item delivery quest or other compatible quest active for this recipient.
+    /// </summary>
+    public ItemQuestInfo? PendingQuest { get; } = pendingQuest;
 
     /// <summary>
     /// Sprite data for the NPC's portrait.
