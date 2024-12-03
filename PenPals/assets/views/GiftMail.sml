@@ -1,10 +1,21 @@
 <lane layout="85%[1200..] 80%[800..]"
       orientation="vertical"
       horizontal-content-alignment="middle">
-    <banner background={@Mods/StardewUI/Sprites/BannerBackground}
-            background-border-thickness="48,0"
-            padding="12"
-            text={#GiftMailMenu.Title} />
+    <panel horizontal-content-alignment="end"
+           vertical-content-alignment="middle">
+        <banner background={@Mods/StardewUI/Sprites/BannerBackground}
+                background-border-thickness="48,0"
+                padding="12, 12, 80, 12"
+                text={#GiftMailMenu.Title} />
+        <frame margin="60, 0">
+            <image layout="48px"
+                   sprite={@Mods/focustense.PenPals/Sprites/Cursors:MagnifyingGlass}
+                   tint={FilterButtonTint}
+                   tooltip={#GiftMailMenu.Filters.Toggle.Tooltip}
+                   focusable="true"
+                   left-click=|ToggleFilters()| />
+        </frame>
+    </panel>
     <lane layout="stretch" vertical-content-alignment="middle">
         <frame *context={:Gift}
                layout="84px"
@@ -20,15 +31,89 @@
                background={@Mods/StardewUI/Sprites/MenuBackground}
                border={@Mods/StardewUI/Sprites/MenuBorder}
                border-thickness="36, 36, 40, 36">
-            <scrollable layout="stretch">
-                <grid layout="stretch content"
-                      item-layout="length: 160"
-                      item-spacing="16, 16"
-                      padding="16, 16, 16, 0"
-                      horizontal-item-alignment="middle">
-                    <recipient *repeat={:Recipients} />
-                </grid>
-            </scrollable>
+            <lane layout="stretch" orientation="vertical">
+                <lane *if={FiltersVisible}
+                      *context={Filters}
+                      layout="stretch content"
+                      padding="16, 8"
+                      vertical-content-alignment="middle"
+                      z-index="1">
+                    <label margin="0, 0, 8, 0" text={#GiftMailMenu.Filters.SearchText.Label} />
+                    <panel layout="content stretch" vertical-content-alignment="middle">
+                        <textinput layout="250px 60px"
+                                   margin="0, 0, 8, 0"
+                                   max-length="25"
+                                   text={<>SearchText} />
+                    </panel>
+                    <spacer layout="stretch 0px" />
+                    <button *switch={MinTaste}
+                            margin="0, 0, 4, 0"
+                            tooltip={#GiftMailMenu.Filters.Taste.Tooltip}
+                            left-click=|ToggleTaste()|>
+                        <image *case="Neutral"
+                               layout="32px 36px"
+                               margin="2"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Emojis:Happy}
+                               tint={TasteButtonTint} />
+                        <image *case="Like"
+                               layout="32px 36px"
+                               margin="2"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Emojis:Happy}
+                               tint={TasteButtonTint} />
+                        <image *case="Love"
+                               layout="32px 36px"
+                               margin="2"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Emojis:Grin}
+                               tint={TasteButtonTint} />
+                    </button>
+                    <button margin="0, 0, 4, 0"
+                            tooltip={#GiftMailMenu.Filters.Quests.Tooltip}
+                            left-click=|ToggleQuests()|>
+                        <image layout="20px 36px"
+                               margin="2"
+                               horizontal-alignment="middle"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Cursors:QuestIndicator}
+                               tint={QuestButtonTint} />
+                    </button>
+                    <button margin="0, 0, 4, 0"
+                            tooltip={#GiftMailMenu.Filters.Birthdays.Tooltip}
+                            left-click=|ToggleBirthdays()|>
+                        <image layout="20px 36px"
+                               margin="2"
+                               horizontal-alignment="middle"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Cursors:Balloon}
+                               tint={BirthdayButtonTint} />
+                    </button>
+                    <button margin="0, 0, 4, 0"
+                            tooltip={#GiftMailMenu.Filters.Reset.Tooltip}
+                            left-click=|Clear()|>
+                        <image layout="32px"
+                               margin="0, 4"
+                               horizontal-alignment="middle"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Cursors:BigRedX} />
+                    </button>
+                </lane>
+                <image *if={FiltersVisible}
+                       layout="stretch content"
+                       fit="stretch"
+                       margin="-36, -20, -40, -20"
+                       sprite={@Mods/StardewUI/Sprites/MenuHorizontalDivider} />
+                <scrollable layout="stretch">
+                    <grid layout="stretch content"
+                          item-layout="length: 160"
+                          item-spacing="16, 16"
+                          padding="16, 16, 16, 0"
+                          horizontal-item-alignment="middle">
+                        <recipient *repeat={Recipients} />
+                    </grid>
+                </scrollable>
+            </lane>
         </frame>
         <spacer layout="120px" />
     </lane>
@@ -41,7 +126,7 @@
         <panel margin="16, 16, 16, 10"
                tooltip={:TooltipText}
                focusable="true"
-               click=|^SelectRecipient(this)|>
+               left-click=|^SelectRecipient(this)|>
             <image layout="128px"
                    vertical-alignment="end"
                    sprite={:Portrait}

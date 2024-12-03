@@ -10,6 +10,41 @@ internal class GiftMailLauncher(
     IMonitor monitor
 )
 {
+    // We deliberately don't save the entire GiftMailFilters because it has live references (e.g.
+    // PropertyChanged event handlers) that could cause leaks if held onto.
+    private record GiftMailFilterState(
+        bool IsVisible,
+        bool Birthdays,
+        bool Quests,
+        GiftTaste MinTaste,
+        string SearchText
+    )
+    {
+        public static GiftMailFilterState FromViewModel(GiftMailViewModel vm)
+        {
+            return new(
+                vm.FiltersVisible,
+                vm.Filters.Birthdays,
+                vm.Filters.Quests,
+                vm.Filters.MinTaste,
+                vm.Filters.SearchText
+            );
+        }
+
+        public void Apply(GiftMailViewModel vm)
+        {
+            vm.FiltersVisible = IsVisible;
+            vm.Filters.Birthdays = Birthdays;
+            vm.Filters.Quests = Quests;
+            vm.Filters.MinTaste = MinTaste;
+            vm.Filters.SearchText = SearchText;
+        }
+    }
+
+    // Filter state is preserved across successive menu opens, but (by design) not preserved across
+    // game sessions, so we don't need this in save data.
+    private GiftMailFilterState? previousFilterState;
+
     public bool Launch(Farmer who)
     {
         var viewModel = TryCreateViewModel(who);
@@ -17,10 +52,14 @@ internal class GiftMailLauncher(
         {
             return false;
         }
-        Game1.activeClickableMenu = viewEngine.CreateMenuFromAsset(
+        previousFilterState?.Apply(viewModel);
+        var controller = viewEngine.CreateMenuControllerFromAsset(
             @"Mods/focustense.PenPals/Views/GiftMail",
             viewModel
         );
+        controller.Closed += () =>
+            previousFilterState = GiftMailFilterState.FromViewModel(viewModel);
+        Game1.activeClickableMenu = controller.Menu;
         return true;
     }
 

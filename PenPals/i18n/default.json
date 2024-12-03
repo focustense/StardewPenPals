@@ -10,6 +10,12 @@
   "GiftMailMenu.Tooltip.Birthday.Today": "It's {{npcName}}'s birthday today!",
   "GiftMailMenu.Tooltip.Birthday.Later": "Gifts sent today will arrive on {{npcName}}'s birthday.",
   "GiftMailMenu.Tooltip.Quest.Description": "Deliver {{requiredCount}} {{itemName}} to complete this quest.\n(You have {{heldCount}} in your inventory.)",
+  "GiftMailMenu.Filters.Toggle.Tooltip": "Show/hide filters",
+  "GiftMailMenu.Filters.SearchText.Label": "Search for NPCs:",
+  "GiftMailMenu.Filters.Birthdays.Tooltip": "Birthdays",
+  "GiftMailMenu.Filters.Quests.Tooltip": "Active quests",
+  "GiftMailMenu.Filters.Reset.Tooltip": "Clear all filters",
+  "GiftMailMenu.Filters.Taste.Tooltip": "Reaction",
 
   // Other UI
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",

@@ -38,4 +38,28 @@ public static class GiftTasteExtensions
             _ => "",
         };
     }
+
+    /// <summary>
+    /// Checks if the specified <see cref="GiftTaste"/> is at least some minimum value.
+    /// </summary>
+    /// <param name="taste">The taste to check.</param>
+    /// <param name="min">The minimum taste required.</param>
+    /// <returns><c>true</c> if the <paramref name="taste"/> is at least as "positive" as the
+    /// specified <paramref name="min"/>, otherwise <c>false</c>.</returns>
+    public static bool IsAtLeast(this GiftTaste taste, GiftTaste min)
+    {
+        return GetRank(taste) >= GetRank(min);
+    }
+
+    private static int GetRank(GiftTaste taste)
+    {
+        return taste switch
+        {
+            GiftTaste.Hate => -2,
+            GiftTaste.Dislike => -1,
+            GiftTaste.Like => 1,
+            GiftTaste.Love => 2,
+            _ => 0,
+        };
+    }
 }

@@ -4,6 +4,12 @@
     "Balloon": {
       "SourceRect": "624, 1387, 11, 19"
     },
+    "BigRedX": {
+      "SourceRect": "269, 471, 14, 15"
+    },
+    "MagnifyingGlass": {
+      "SourceRect": "208, 320, 16, 16"
+    },
     "PortraitFrame": {
       "SourceRect": "603, 414, 74, 74",
       "FixedEdges": "5",
