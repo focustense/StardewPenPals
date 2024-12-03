@@ -14,7 +14,15 @@ namespace PenPals.UI;
 /// <param name="Text">The formatted text, which is an abbreviated version of the quest description
 /// and shown in the tooltip body.</param>
 /// <param name="RequiredItemId">ID of the item that must be delivered to complete the quest.</param>
-public record ItemQuestInfo(string Title, string Text, string RequiredItemId)
+/// <param name="RequiredItemAmount">Number of items that must be delivered.</param>
+/// <param name="CurrencyAmount">Amount of money to display, e.g. as a reward.</param>
+public record ItemQuestInfo(
+    string Title,
+    string Text,
+    string RequiredItemId,
+    int RequiredItemAmount,
+    int? CurrencyAmount
+)
 {
     /// <summary>
     /// Attempts to resolve the delivery info for a quest. Requires a compatible quest type.
@@ -36,14 +44,13 @@ public record ItemQuestInfo(string Title, string Text, string RequiredItemId)
         {
             return null;
         }
-        var item = ItemRegistry.Create(itemId, itemCount);
         var heldCount = who.Items.CountId(itemId);
         var description = I18n.GiftMailMenu_Tooltip_Quest_Description(
-            itemCount,
-            itemCount > 1 ? Lexicon.makePlural(item.DisplayName) : item.DisplayName,
+            quest.currentObjective,
             heldCount
         );
-        return new(quest.questTitle, description, itemId);
+        int? moneyAmount = quest.moneyReward.Value > 0 ? quest.moneyReward.Value : null;
+        return new(quest.questTitle, description, itemId, itemCount, moneyAmount);
     }
 
     private static bool IsCompletable(FishingQuest quest, NPC npc)
