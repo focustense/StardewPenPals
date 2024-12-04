@@ -1,4 +1,5 @@
 using PenPals.Data;
+using StardewValley.Quests;
 
 namespace PenPals.UI;
 
@@ -87,6 +88,7 @@ internal class GiftMailLauncher(
         ModConfig config,
         GiftMailData data,
         MailRules rules,
+        IReadOnlyList<Quest> supportedQuests,
         WorldDate deliveryDate
     )
     {
@@ -106,9 +108,9 @@ internal class GiftMailLauncher(
         var pendingGift = data.OutgoingGifts.TryGetValue(npc.Name, out var pendingItem)
             ? new GiftItemViewModel(pendingItem)
             : null;
-        var pendingQuest = Game1.questOfTheDay is { } quest
-            ? ItemQuestInfo.TryFromQuest(quest, who, npc)
-            : null;
+        var pendingQuest = supportedQuests
+            .Select(quest => ItemQuestInfo.TryFromQuest(quest, who, npc))
+            .FirstOrDefault(info => info is not null);
         return new RecipientViewModel(
             npc,
             item,
@@ -150,11 +152,23 @@ internal class GiftMailLauncher(
             config.Scheduling == GiftShipmentScheduling.SameDay
                 ? Game1.Date
                 : WorldDate.ForDaysPlayed(Game1.Date.TotalDays + 1);
+        var supportedQuests = config.EnableQuests
+            ? who.questLog.Where(ItemQuestInfo.IsQuestSupported).ToArray()
+            : [];
         var recipients = Game1
             .characterData.Keys.Select(name => Game1.getCharacterFromName(name))
             .Where(npc => npc is not null)
             .Select(npc =>
-                TryCreateRecipient(who, npc, giftObject, config, giftMailData, rules, deliveryDate)
+                TryCreateRecipient(
+                    who,
+                    npc,
+                    giftObject,
+                    config,
+                    giftMailData,
+                    rules,
+                    supportedQuests,
+                    deliveryDate
+                )
             )
             .Where(recipient => recipient is not null)
             .Cast<RecipientViewModel>()

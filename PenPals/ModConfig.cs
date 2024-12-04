@@ -15,6 +15,15 @@ public class ModConfig
     public bool DetailedReturnReasons { get; set; } = false;
 
     /// <summary>
+    /// Whether to display active quests in the gift mail menu, and use mailed items to complete
+    /// quests if they meet the requirement.
+    /// </summary>
+    /// <remarks>
+    /// Only supports specific quest types involving delivery of a single item.
+    /// </remarks>
+    public bool EnableQuests { get; set; } = true;
+
+    /// <summary>
     /// Multiplier that applies to the friendship points gained from gifting.
     /// </summary>
     /// <remarks>

@@ -9,7 +9,7 @@
   "GiftMailMenu.Tooltip.Pending": "{{itemName}} is on its way",
   "GiftMailMenu.Tooltip.Birthday.Today": "It's {{npcName}}'s birthday today!",
   "GiftMailMenu.Tooltip.Birthday.Later": "Gifts sent today will arrive on {{npcName}}'s birthday.",
-  "GiftMailMenu.Tooltip.Quest.Description": "{{objective}}.\n\n(You have {{heldCount}} in your inventory.)",
+  "GiftMailMenu.Tooltip.Quest.Description": "{{objective}}\n\n(You have {{heldCount}} in your inventory.)",
   "GiftMailMenu.Filters.Toggle.Tooltip": "Show/hide filters",
   "GiftMailMenu.Filters.SearchText.Label": "Search for NPCs:",
   "GiftMailMenu.Filters.Birthdays.Tooltip": "Birthdays",

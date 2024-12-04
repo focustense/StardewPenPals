@@ -25,6 +25,21 @@ public record ItemQuestInfo(
 )
 {
     /// <summary>
+    /// Checks if a quest is supported by the mod.
+    /// </summary>
+    /// <remarks>
+    /// This is used as an initial filter to limit the quests passed into <see cref="TryFromQuest"/>
+    /// in order to speed up menu creation.
+    /// </remarks>
+    /// <param name="quest">The quest to check.</param>
+    /// <returns><c>true</c> if the <paramref name="quest"/> <b>might</b> yield a valid result when
+    /// provided to <see cref="TryFromQuest"/>; <c>false</c> if it can never be satisfied.</returns>
+    public static bool IsQuestSupported(Quest quest)
+    {
+        return !quest.completed.Value && quest is FishingQuest or ItemDeliveryQuest;
+    }
+
+    /// <summary>
     /// Attempts to resolve the delivery info for a quest. Requires a compatible quest type.
     /// </summary>
     /// <param name="quest">The active quest.</param>
