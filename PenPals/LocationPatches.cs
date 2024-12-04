@@ -6,6 +6,6 @@ internal static class LocationPatches
 
     public static bool LocalSound_Prefix(string audioName)
     {
-        return !(SuppressGiftSounds && audioName == "give_gift");
+        return !(SuppressGiftSounds && audioName is "give_gift");
     }
 }

@@ -37,6 +37,7 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
     {
         var results = new List<GiftResult>();
         bool hasReturns = false;
+        bool hasCompletedQuests = false;
         foreach (var (playerId, giftData) in data.FarmerGiftMail)
         {
             var farmer = Game1.GetPlayer(playerId);
@@ -87,7 +88,16 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                 {
                     var questPoints = Context.Rules.GetQuestPoints(quest);
                     farmer.changeFriendship(questPoints, npc);
-                    quest.questComplete();
+                    GamePatches.SuppressQuestSounds = true;
+                    try
+                    {
+                        quest.questComplete();
+                    }
+                    finally
+                    {
+                        GamePatches.SuppressQuestSounds = false;
+                    }
+                    hasCompletedQuests = true;
                     results.Add(new(farmer, npc, parcel.Gift, quest, "Quest", questPoints));
                 }
                 else
@@ -123,6 +133,10 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                 continue;
             }
             giftData.OutgoingGifts.Remove(result.To.Name);
+        }
+        if (hasCompletedQuests)
+        {
+            Game1.playSound("questcomplete");
         }
         if (hasReturns)
         {
