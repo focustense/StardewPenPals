@@ -69,7 +69,8 @@
                                sprite={@Mods/focustense.PenPals/Sprites/Emojis:Grin}
                                tint={TasteButtonTint} />
                     </button>
-                    <button margin="0, 0, 4, 0"
+                    <button *if={^QuestsEnabled}
+                            margin="0, 0, 4, 0"
                             tooltip={#GiftMailMenu.Filters.Quests.Tooltip}
                             left-click=|ToggleQuests()|>
                         <image layout="20px 36px"

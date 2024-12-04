@@ -38,6 +38,11 @@ public class ModConfig
     public GiftTasteVisibility GiftTasteVisibility { get; set; } = GiftTasteVisibility.Known;
 
     /// <summary>
+    /// Multiplier that applies to the friendship points gained from quest deliveries.
+    /// </summary>
+    public float QuestFriendshipMultiplier { get; set; } = 0.6f;
+
+    /// <summary>
     /// Whether to display a confirmation dialog before sending to the selected NPC.
     /// </summary>
     /// <remarks>

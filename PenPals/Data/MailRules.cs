@@ -149,7 +149,7 @@ public class MailRules(ModConfig config, CustomRules customRules)
     public int GetQuestPoints(Quest quest)
     {
         int basePoints = quest.dailyQuest.Value ? 150 : 255;
-        return (int)(basePoints * config.FriendshipMultiplier);
+        return (int)(basePoints * config.QuestFriendshipMultiplier);
     }
 
     /// <summary>

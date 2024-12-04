@@ -46,8 +46,26 @@ internal static class ConfigMenu
             mod,
             getValue: () => config().FriendshipMultiplier,
             setValue: value => config().FriendshipMultiplier = value,
-            name: I18n.Gmcm_Gameplay_FriendshipMultiplier_Name,
-            tooltip: I18n.Gmcm_Gameplay_FriendshipMultiplier_Tooltip,
+            name: I18n.Gmcm_Gameplay_GiftFriendshipMultiplier_Name,
+            tooltip: I18n.Gmcm_Gameplay_GiftFriendshipMultiplier_Tooltip,
+            min: 0.05f,
+            max: 1.0f,
+            interval: 0.05f,
+            formatValue: value => value.ToString("P0")
+        );
+        gmcm.AddBoolOption(
+            mod,
+            getValue: () => config().EnableQuests,
+            setValue: value => config().EnableQuests = value,
+            name: I18n.Gmcm_Gameplay_EnableQuests_Name,
+            tooltip: I18n.Gmcm_Gameplay_EnableQuests_Tooltip
+        );
+        gmcm.AddNumberOption(
+            mod,
+            getValue: () => config().QuestFriendshipMultiplier,
+            setValue: value => config().QuestFriendshipMultiplier = value,
+            name: I18n.Gmcm_Gameplay_QuestFriendshipMultiplier_Name,
+            tooltip: I18n.Gmcm_Gameplay_QuestFriendshipMultiplier_Tooltip,
             min: 0.05f,
             max: 1.0f,
             interval: 0.05f,

@@ -13,7 +13,8 @@ namespace PenPals.UI;
 public partial class GiftMailViewModel(
     GiftItemViewModel gift,
     IReadOnlyList<RecipientViewModel> recipients,
-    GiftSender sender
+    GiftSender sender,
+    ModConfig config
 ) : INotifyPropertyChanged
 {
     /// <summary>
@@ -30,6 +31,11 @@ public partial class GiftMailViewModel(
     /// Details about the item to be sent as a gift.
     /// </summary>
     public GiftItemViewModel Gift { get; } = gift;
+
+    /// <summary>
+    /// Whether quest completion via mail is enabled in the mod settings.
+    /// </summary>
+    public bool QuestsEnabled { get; } = config.EnableQuests;
 
     /// <summary>
     /// Details about each of the available recipients.

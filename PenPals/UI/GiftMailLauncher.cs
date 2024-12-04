@@ -176,6 +176,6 @@ internal class GiftMailLauncher(
             .ThenBy(recipient => recipient.HasPendingGift)
             .ToList();
         var sender = new GiftSender(who, giftObject, config, giftMailData, monitor);
-        return new(gift, recipients, sender);
+        return new(gift, recipients, sender, config);
     }
 }
