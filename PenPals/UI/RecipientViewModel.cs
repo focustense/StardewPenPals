@@ -52,6 +52,13 @@ public class RecipientViewModel(
         && npc.Birthday_Day == deliveryDate.DayOfMonth;
 
     /// <summary>
+    /// Whether the <see cref="PendingQuest"/> can be completed with the current item stack.
+    /// </summary>
+    public bool HasCompletableQuest { get; } =
+        pendingQuest?.RequiredItemId == item.QualifiedItemId
+        && pendingQuest.RequiredItemAmount <= item.Stack;
+
+    /// <summary>
     /// Whether the recipient has a <see cref="PendingGift"/>.
     /// </summary>
     public bool HasPendingGift => PendingGift is not null;

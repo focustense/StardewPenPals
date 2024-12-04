@@ -128,6 +128,12 @@
                tooltip={:TooltipText}
                focusable="true"
                left-click=|^SelectRecipient(this)|>
+            <image *if={:HasCompletableQuest}
+                   layout="stretch"
+                   margin="-8, -8, -8, -2"
+                   fit="stretch"
+                   sprite={@Mods/StardewUI/Sprites/White}
+                   tint="#06c3" />
             <image layout="128px"
                    vertical-alignment="end"
                    sprite={:Portrait}
