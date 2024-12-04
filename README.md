@@ -48,6 +48,9 @@ A few extra bells and whistles on this page are worth noting:
 - By default, emojis will show for gift tastes that are known to your character - if you've given that specific gift to that specific NPC before, or it has been revealed through dialogue or secret notes. If you don't find this "immersive" aspect to enhance your experience, and are just going to look up the gift tastes anyway on the [wiki page](https://stardewvalleywiki.com/List_of_All_Gifts) or with [Lookup Anything](https://www.nexusmods.com/stardewvalley/mods/541), you can change this in the [options](#configuration) to always show the gift taste for every NPC.
 - NPCs that can't be gifted for a specific reason (at weekly limit, relationship maxed, etc.) will be grayed out. Hover over their portrait for details.
 - NPCs to whom you've already sent a gift on that day will appear with a green-tinted background, as well as an icon showing which gift you sent. These NPCs are **not** disabled; you _can_ select them, but doing so will replace the gift you previously sent (you'll receive the old item back).
+- If you've enabled quest deliveries in the [Settings](#settings) (enabled by default), an additional overlay will be shown for each NPC with a pending quest; hovering over this will show which quest, and what item is required.
+- NPCs with birthdays will display a small balloon. Birthday indicators incorporate your Mail Schedule [setting](#settings); if you choose Next-Day delivery, the indicator will show for NPCs with birthdays tomorrow instead of today.
+- If you have a lot of NPCs, click on the magnifying class next to the "Send a gift" banner to open up additional filters. You can filter by name, gift taste/reaction, quests (if enabled) and birthdays.
 
 ### Returns
 
@@ -111,12 +114,13 @@ All of this mod's options are configurable through GMCM. If you prefer to edit t
 ### Settings
 
 * `DetailedReturnReasons`: Whether to show the exact reason why a gift was returned in the [return mail](#returns). Valid values are `true` or `false`.
+* `EnableQuests`: Whether to allow quests to be completed by mail. Also controls whether quest options and indicators show in the gift menu.
 * `FriendshipMultiplier`: Scales down the friendship gain when a gift is mailed, compared to an in-person gift. This can be any numeric value, but see [Balance](#balance) for details.
 * `GiftTasteVisibility`: When to show gift tastes for NPCs in the gift-mail menu. Valid values are:
   * `All` - always show gift tastes for all combinations of NPC and gift item regardless of game progression. Recommended for veteran/challenge players unconcerned about spoilers.
   * `Known` - only show gift tastes that would also be visible on the NPC's profile page, i.e. those discovered through previous gifting or via dialogue, Secret Note, etc.
   * `None` - never show gift tastes. For those who are way past "veteran" and have every gift taste memorized, and don't want the emojis cluttering up the UI.
-
+* `QuestFriendshipMultiplier`: Scales down the friendship gain when a quest is completed by mail, compared to an in-person delivery. This can be any numeric value, but see [Balance](#balance) for details.
 * `RequireConfirmation`: Display a confirmation dialog before posting a gift. Helpful to prevent accidental misclicks. Default is `true`, change to `false` if the dialog is interrupting your flow/immersion.
 * `RequireQuestCompletion`: Gift mail menu will not show up when interacting with the mailbox until completion of the "How to Win Friends" quest, which requires first meeting everyone in town (to receive the quest) and gifting at least one NPC in person.
   * Note that regardless of this setting, NPCs whom you haven't met yet will _not_ be available for gifting. You may want to set this to `false` if you play with hundreds of NPCs and completing the above quest is actually very difficult, but you still can't mail gifts to strangers. *(For example: how would you know their address?)*

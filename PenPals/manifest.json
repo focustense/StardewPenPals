@@ -2,7 +2,7 @@
   "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Pen Pals",
   "Author": "focustense",
-  "Version": "0.2.0",
+  "Version": "0.3.0",
   "Description": "Send NPCs gifts by mail",
   "UniqueID": "focustense.PenPals",
   "EntryDll": "PenPals.dll",

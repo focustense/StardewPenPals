@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-## [0.2.0] - 2024-10-29
+## [0.3.0] - 2024-11-03
+
+### Added
+
+- Overlay icon in gift menu for NPCs with birthdays.
+- Enable completion of delivery quests (configurable), and show overlays and tooltips for active quests.
+- New filter panel, accessed by clicking the magnifying glass. Can filter by name, gift reaction, quest (if enabled) and birthday.
+
+## [0.2.0] - 2024-11-29
 
 ### Changed
 
@@ -30,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Console commands `dryrun` and `receiveall`.
 - Generic Mod Config Menu page.
 
-[Unreleased]: https://github.com/focustense/StardewPenPals/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/focustense/StardewPenPals/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/focustense/StardewPenPals/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/focustense/StardewPenPals/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/focustense/StardewPenPals/tree/v0.1.0
