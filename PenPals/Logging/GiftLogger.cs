@@ -5,7 +5,7 @@ namespace PenPals.Logging;
 
 internal static class GiftLogger
 {
-    private static readonly int[] COLUMN_WIDTHS = [12, 12, 20, 14, 5];
+    private static readonly int[] COLUMN_WIDTHS = [10, 10, 20, 14, 4, 11];
 
     public static void LogResults(
         IEnumerable<GiftResult> results,
@@ -17,7 +17,7 @@ internal static class GiftLogger
         var output = new StringBuilder();
         output.AppendLine(title);
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Top);
-        output.AppendColumns(COLUMN_WIDTHS, "From", "To", "Gift", "Reaction", "Pts");
+        output.AppendColumns(COLUMN_WIDTHS, "From", "To", "Gift", "Reaction", "Pts", "Quest");
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Middle);
         foreach (var result in results)
         {
@@ -32,7 +32,8 @@ internal static class GiftLogger
                 result.To.Name,
                 giftName,
                 result.Outcome,
-                result.Points
+                result.Points,
+                result.CompletedQuest?.SafeId() ?? ""
             );
         }
         output.AppendBorderLine(COLUMN_WIDTHS, BorderLine.Bottom);

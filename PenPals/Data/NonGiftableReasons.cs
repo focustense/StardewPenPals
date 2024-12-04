@@ -95,4 +95,20 @@ public enum NonGiftableReasons
     /// This is the same rule as regular in-person giftability of the dwarf.
     /// </remarks>
     NoDwarvish = 512,
+
+    /// <summary>
+    /// The quest that was supposed to be completed by this delivery is no longer in the quest log.
+    /// </summary>
+    /// <remarks>
+    /// Only occurs during the actual gift-sending process, and has no meaning in the UI.
+    /// </remarks>
+    QuestMissing = 1024,
+
+    /// <summary>
+    /// The quest that was supposed to be completed by this delivery was already completed.
+    /// </summary>
+    /// <remarks>
+    /// Only occurs during the actual gift-sending process, and has no meaning in the UI.
+    /// </remarks>
+    QuestCompleted = 2048,
 }

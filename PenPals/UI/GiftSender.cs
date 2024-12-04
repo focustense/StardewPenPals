@@ -20,34 +20,49 @@ public class GiftSender(
 )
 {
     /// <summary>
-    /// Sends the current item to the specified <paramref name="npc"/>, subject to confirmation if configured.
+    /// Sends the current item to the specified <paramref name="npc"/>, subject to confirmation if
+    /// configured.
     /// </summary>
     /// <param name="npc">The intended recipient of the gift.</param>
-    public void Send(NPC npc)
+    /// <param name="questInfo">Info about the quest, if any, to complete using this gift.</param>
+    public void Send(NPC npc, ItemQuestInfo? questInfo)
     {
         Game1.playSound("smallSelect");
+        int count = questInfo?.RequiredItemAmount > 1 ? questInfo.RequiredItemAmount : 1;
         if (config.RequireConfirmation)
         {
             Game1.playSound("breathin");
-            var confirmationMessage = data.OutgoingGifts.TryGetValue(npc.Name, out var previousGift)
+            string giftDisplayName =
+                count > 1
+                    ? I18n.GiftConfirmation_Multiple(count, item.DisplayName)
+                    : item.DisplayName;
+            var confirmationMessage = data.OutgoingGifts.TryGetValue(
+                npc.Name,
+                out var previousParcel
+            )
                 ? I18n.GiftConfirmation_Replace(
-                    previousGift.DisplayName,
-                    item.DisplayName,
+                    previousParcel.Gift.Stack > 1
+                        ? I18n.GiftConfirmation_Multiple(
+                            previousParcel.Gift.Stack,
+                            previousParcel.Gift.DisplayName
+                        )
+                        : previousParcel.Gift.DisplayName,
+                    giftDisplayName,
                     npc.displayName
                 )
-                : I18n.GiftConfirmation_New(item.DisplayName, npc.displayName);
+                : I18n.GiftConfirmation_New(giftDisplayName, npc.displayName);
             Game1.activeClickableMenu = new ConfirmationDialog(
                 confirmationMessage,
-                _ => ScheduleSend(npc)
+                _ => ScheduleSend(npc, questInfo)
             );
         }
         else
         {
-            ScheduleSend(npc);
+            ScheduleSend(npc, questInfo);
         }
     }
 
-    private void ScheduleSend(NPC npc)
+    private void ScheduleSend(NPC npc, ItemQuestInfo? questInfo)
     {
         if (sender.ActiveItem != item)
         {
@@ -68,12 +83,27 @@ public class GiftSender(
             Game1.showRedMessage(I18n.Hud_Error_ScheduleGift());
             return;
         }
-        sender.reduceActiveItemByOne();
-        if (data.OutgoingGifts.TryGetValue(npc.Name, out var previousGiftObject))
+        int count = questInfo?.RequiredItemAmount > 0 ? questInfo.RequiredItemAmount : 1;
+        if (sender.ActiveItem.Stack < count)
         {
-            sender.addItemByMenuIfNecessary(previousGiftObject);
+            monitor.Log(
+                $"Couldn't schedule gift: stack size ({sender.ActiveItem.Stack}) is no longer "
+                    + $"large enough to remove {count} item(s) from.",
+                LogLevel.Error
+            );
+            return;
         }
-        data.OutgoingGifts[npc.Name] = giftObject;
+        if (count > 1)
+        {
+            sender.ActiveItem.Stack -= count - 1;
+        }
+        giftObject.Stack = count;
+        sender.reduceActiveItemByOne();
+        if (data.OutgoingGifts.TryGetValue(npc.Name, out var previousParcel))
+        {
+            sender.addItemByMenuIfNecessary(previousParcel.Gift);
+        }
+        data.OutgoingGifts[npc.Name] = new(giftObject, questInfo?.Id);
         Game1.playSound("Ship");
         monitor.Log(
             $"Scheduled send of {item.Name} (quality {item.Quality}) to {npc.Name}.",

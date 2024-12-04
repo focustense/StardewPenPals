@@ -1,4 +1,5 @@
 ﻿using StardewValley.Characters;
+using StardewValley.Quests;
 
 namespace PenPals.Data;
 
@@ -14,11 +15,31 @@ public class MailRules(ModConfig config, CustomRules customRules)
     /// <param name="from">The player sending the gift.</param>
     /// <param name="to">The NPC who will receive the gift.</param>
     /// <param name="item">The item being given as gift.</param>
+    /// <param name="questId">ID of the quest, if any, to be completed with the gift.</param>
     /// <returns>A <see cref="NonGiftableReasons"/> flag value including all reasons why the gift
     /// cannot be sent.</returns>
-    public NonGiftableReasons CheckGiftability(Farmer from, NPC to, Item item)
+    public NonGiftableReasons CheckGiftability(
+        Farmer from,
+        NPC to,
+        Item item,
+        string? questId = null
+    )
     {
         var reasons = NonGiftableReasons.None;
+        if (!string.IsNullOrEmpty(questId))
+        {
+            var quest = GiftDistributor.GetDeliveryQuest(from, questId);
+            if (quest is null)
+            {
+                reasons |= NonGiftableReasons.QuestMissing;
+            }
+            else if (quest.completed.Value)
+            {
+                reasons |= NonGiftableReasons.QuestCompleted;
+            }
+            // Don't process additional reasons for quests, since quests are not normal gifts.
+            return reasons;
+        }
         if (!to.CanReceiveGifts())
         {
             reasons |= NonGiftableReasons.CannotReceiveGifts;
@@ -81,9 +102,14 @@ public class MailRules(ModConfig config, CustomRules customRules)
     /// <param name="from">The player sending the gift.</param>
     /// <param name="to">The NPC who will receive the gift.</param>
     /// <param name="item">The item being given as gift.</param>
+    /// <param name="quest">The active quest, if any, to be completed.</param>
     /// <returns></returns>
-    public int EstimateFriendshipGain(Farmer from, NPC to, Item item)
+    public int EstimateFriendshipGain(Farmer from, NPC to, Item item, Quest? quest)
     {
+        if (quest is not null)
+        {
+            return GetQuestPoints(quest);
+        }
         float multiplier = GetQualityMultiplier(item.Quality);
         if (WillReceiveOnBirthday(to))
         {
@@ -113,6 +139,17 @@ public class MailRules(ModConfig config, CustomRules customRules)
             resultPoints = Math.Max(resultPoints, -currentPoints);
         }
         return resultPoints;
+    }
+
+    /// <summary>
+    /// Computes the points to be awarded for completing a quest, after applying scaling.
+    /// </summary>
+    /// <param name="quest">The quest to complete.</param>
+    /// <returns>Scaled points awarded for completing the <paramref name="quest"/>.</returns>
+    public int GetQuestPoints(Quest quest)
+    {
+        int basePoints = quest.dailyQuest.Value ? 150 : 255;
+        return (int)(basePoints * config.FriendshipMultiplier);
     }
 
     /// <summary>

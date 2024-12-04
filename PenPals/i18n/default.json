@@ -18,6 +18,7 @@
   "GiftMailMenu.Filters.Taste.Tooltip": "Reaction",
 
   // Other UI
+  "GiftConfirmation.Multiple": "{{count}}x {{itemName}}",
   "GiftConfirmation.New": "Send {{itemName}} to {{npcName}}?",
   "GiftConfirmation.Replace": "Swap {{previousItem}} with {{itemName}} for {{npcName}}?",
 
@@ -54,6 +55,8 @@
   "Enum.NonGiftableReasons.Divorced": "You divorced them",
   "Enum.NonGiftableReasons.MaxFriendship": "You're already at max hearts",
   "Enum.NonGiftableReasons.NoDwarvish": "You don't understand Dwarvish",
+  "Enum.NonGiftableReasons.QuestCompleted": "The quest was already completed",
+  "Enum.NonGiftableReasons.QuestMissing": "The quest is no longer available",
   "Enum.NonGiftableReasons.Rejection": "They can't accept this item",
   "Enum.NonGiftableReasons.Spouse": "This is your spouse",
   "Enum.NonGiftableReasons.Unmet": "You haven't met this person",

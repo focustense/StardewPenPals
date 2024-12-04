@@ -56,7 +56,13 @@ public partial class GiftMailViewModel(
         {
             return false;
         }
-        sender.Send(recipient.Npc);
+        var questToResolve =
+            recipient.PendingQuest is not null
+            && recipient.PendingQuest.RequiredItemId == Gift.Item.QualifiedItemId
+            && Gift.Item.Stack >= recipient.PendingQuest.RequiredItemAmount
+                ? recipient.PendingQuest
+                : null;
+        sender.Send(recipient.Npc, questToResolve);
         return true;
     }
 

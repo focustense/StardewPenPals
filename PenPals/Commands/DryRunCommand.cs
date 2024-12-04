@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using PenPals.Data;
 using PenPals.Logging;
+using StardewValley.Quests;
 
 namespace PenPals.Commands;
 
@@ -25,7 +26,7 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
                 context.Monitor.Log($"Could not find Farmer with ID: {playerId}", LogLevel.Error);
                 continue;
             }
-            foreach (var (npcName, giftObject) in giftData.OutgoingGifts)
+            foreach (var (npcName, parcel) in giftData.OutgoingGifts)
             {
                 var npc = Game1.getCharacterFromName(npcName);
                 if (npc is null)
@@ -33,13 +34,13 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
                     context.Monitor.Log($"Could not find NPC named '{npcName}'.", LogLevel.Error);
                     continue;
                 }
-                var (tasteName, points) = GetExpectedOutcome(
+                var (summary, quest, points) = GetExpectedOutcome(
                     farmer,
                     npc,
-                    giftObject,
+                    parcel,
                     context.Rules
                 );
-                results.Add(new(farmer, npc, giftObject, tasteName, points));
+                results.Add(new(farmer, npc, parcel.Gift, quest, summary, points));
             }
         }
         GiftLogger.LogResults(results, "Results of Gift Mail dry-run:", context.Monitor);
@@ -56,21 +57,30 @@ internal class DryRunCommand(Func<RulesContext> contextSelector) : ICommand<DryR
         return true;
     }
 
-    private static (string, int) GetExpectedOutcome(
+    private static (string, Quest?, int) GetExpectedOutcome(
         Farmer farmer,
         NPC npc,
-        SObject giftObject,
+        Parcel parcel,
         MailRules rules
     )
     {
-        var nonGiftableReasons = rules.CheckGiftability(farmer, npc, giftObject);
+        var nonGiftableReasons = rules.CheckGiftability(farmer, npc, parcel.Gift, parcel.QuestId);
         if (nonGiftableReasons != 0)
         {
-            return ($"Returned:{(int)nonGiftableReasons}", 0);
+            return ($"Returned:{(int)nonGiftableReasons}", null, 0);
         }
-        var taste = npc.getGiftTasteForThisItem(giftObject);
-        var (tasteName, _) = GiftTasteBehavior.ForGiftTaste(taste);
-        var estimatedPoints = rules.EstimateFriendshipGain(farmer, npc, giftObject);
-        return (tasteName, estimatedPoints);
+        var quest = GiftDistributor.GetDeliveryQuest(farmer, parcel.QuestId);
+        string summary;
+        if (quest is not null)
+        {
+            summary = "Quest";
+        }
+        else
+        {
+            var taste = npc.getGiftTasteForThisItem(parcel.Gift);
+            (summary, _) = GiftTasteBehavior.ForGiftTaste(taste);
+        }
+        var estimatedPoints = rules.EstimateFriendshipGain(farmer, npc, parcel.Gift, quest);
+        return (summary, quest, estimatedPoints);
     }
 }

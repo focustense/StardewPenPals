@@ -33,7 +33,7 @@
                border-thickness="36, 36, 40, 36">
             <lane layout="stretch" orientation="vertical">
                 <lane *if={FiltersVisible}
-                      *context={Filters}
+                      *context={:Filters}
                       layout="stretch content"
                       padding="16, 8"
                       vertical-content-alignment="middle"

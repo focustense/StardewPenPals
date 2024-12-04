@@ -34,7 +34,7 @@ public class GiftMailData
     /// <summary>
     /// Gifts scheduled to be sent but not yet "opened"; keyed by NPC's unique/internal name.
     /// </summary>
-    public Dictionary<string, SObject> OutgoingGifts { get; set; } = [];
+    public Dictionary<string, Parcel> OutgoingGifts { get; set; } = [];
 
     /// <summary>
     /// Gifts that were returned to the player because the NPC was deemed non-giftable at the time

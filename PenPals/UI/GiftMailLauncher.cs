@@ -105,8 +105,8 @@ internal class GiftMailLauncher(
             return null;
         }
         var taste = GetGiftTaste(who, npc, item, config);
-        var pendingGift = data.OutgoingGifts.TryGetValue(npc.Name, out var pendingItem)
-            ? new GiftItemViewModel(pendingItem)
+        var pendingGift = data.OutgoingGifts.TryGetValue(npc.Name, out var pendingParcel)
+            ? new GiftItemViewModel(pendingParcel.Gift)
             : null;
         var pendingQuest = supportedQuests
             .Select(quest => ItemQuestInfo.TryFromQuest(quest, who, npc))

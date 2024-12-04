@@ -1,4 +1,6 @@
-﻿namespace PenPals.Data;
+﻿using StardewValley.Quests;
+
+namespace PenPals.Data;
 
 /// <summary>
 /// Helper class for distributing outgoing gifts, i.e. making NPCs actually receive them.
@@ -16,6 +18,19 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
     private readonly MailRules rules = context.Rules;
 
     /// <summary>
+    /// Attempts to retrieve the quest associated with an outgoing gift.
+    /// </summary>
+    /// <param name="who">The player sending the gift.</param>
+    /// <param name="questId">Unique quest ID, or <c>null</c> to ignore.</param>
+    /// <returns>The matching <see cref="Quest"/>, or <c>null</c> if not found.</returns>
+    public static Quest? GetDeliveryQuest(Farmer who, string? questId)
+    {
+        return !string.IsNullOrEmpty(questId)
+            ? who.questLog.FirstOrDefault(quest => quest.SafeId() == questId)
+            : null;
+    }
+
+    /// <summary>
     /// Make all NPCs receive their gifts immediately.
     /// </summary>
     public IReadOnlyList<GiftResult> ReceiveAll()
@@ -30,7 +45,7 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                 monitor.Log($"Farmer ID {playerId} not found; skipping gifts.", LogLevel.Error);
                 continue;
             }
-            foreach (var (npcName, giftObject) in giftData.OutgoingGifts)
+            foreach (var (npcName, parcel) in giftData.OutgoingGifts)
             {
                 var npc = Game1.getCharacterFromName(npcName);
                 if (npc is null)
@@ -41,42 +56,64 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                     );
                     continue;
                 }
-                var nonGiftableReasons = rules.CheckGiftability(farmer, npc, giftObject);
+                var nonGiftableReasons = rules.CheckGiftability(
+                    farmer,
+                    npc,
+                    parcel.Gift,
+                    parcel.QuestId
+                );
                 if (nonGiftableReasons != 0)
                 {
                     results.Add(
-                        new(farmer, npc, giftObject, $"Returned:{(int)nonGiftableReasons}", 0)
+                        new(
+                            farmer,
+                            npc,
+                            parcel.Gift,
+                            null,
+                            $"Returned:{(int)nonGiftableReasons}",
+                            0
+                        )
                     );
                     var returnId = Guid.NewGuid().ToString();
                     giftData.ReturnedGifts.Add(
                         returnId,
-                        new(npcName, giftObject, Game1.Date, nonGiftableReasons)
+                        new(npcName, parcel.Gift, Game1.Date, nonGiftableReasons)
                     );
                     farmer.mailbox.Add(GiftMailData.GetReturnMailKey(returnId));
                     hasReturns = true;
                     continue;
                 }
-                var giftTaste = npc.getGiftTasteForThisItem(giftObject);
-                var (tasteName, basePoints) = GiftTasteBehavior.ForGiftTaste(giftTaste);
-                var multiplier = basePoints >= 0 ? config.FriendshipMultiplier : 1.0f;
-                var previousFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
-                LocationPatches.SuppressGiftSounds = true;
-                try
+                if (GetDeliveryQuest(farmer, parcel.QuestId) is { } quest)
                 {
-                    npc.receiveGift(
-                        giftObject,
-                        farmer,
-                        friendshipChangeMultiplier: multiplier,
-                        showResponse: false
-                    );
+                    var questPoints = Context.Rules.GetQuestPoints(quest);
+                    farmer.changeFriendship(questPoints, npc);
+                    quest.questComplete();
+                    results.Add(new(farmer, npc, parcel.Gift, quest, "Quest", questPoints));
                 }
-                finally
+                else
                 {
-                    LocationPatches.SuppressGiftSounds = false;
+                    var giftTaste = npc.getGiftTasteForThisItem(parcel.Gift);
+                    var (tasteName, basePoints) = GiftTasteBehavior.ForGiftTaste(giftTaste);
+                    var multiplier = basePoints >= 0 ? config.FriendshipMultiplier : 1.0f;
+                    var previousFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
+                    LocationPatches.SuppressGiftSounds = true;
+                    try
+                    {
+                        npc.receiveGift(
+                            parcel.Gift,
+                            farmer,
+                            friendshipChangeMultiplier: multiplier,
+                            showResponse: false
+                        );
+                    }
+                    finally
+                    {
+                        LocationPatches.SuppressGiftSounds = false;
+                    }
+                    var nextFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
+                    var pointsGained = nextFriendship - previousFriendship;
+                    results.Add(new(farmer, npc, parcel.Gift, null, tasteName, pointsGained));
                 }
-                var nextFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
-                var pointsGained = nextFriendship - previousFriendship;
-                results.Add(new(farmer, npc, giftObject, tasteName, pointsGained));
             }
         }
         foreach (var result in results)
