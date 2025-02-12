@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-02-12
+
+### Added
+
+- Mail rules take into account modified weekly limits from Button's Extra Books.
+
+### Changed
+
+- Max friendship no longer prevents giving gifts; instead it is available as an optional filter in the Gift Mail menu.
+
+### Fixed
+
+- Pending gifts and returned gifts should now be correctly written to save games, meaning they are not lost after restarting the day or quitting the game.
+
 ## [0.3.0] - 2024-11-03
 
 ### Added
@@ -38,7 +52,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Console commands `dryrun` and `receiveall`.
 - Generic Mod Config Menu page.
 
-[Unreleased]: https://github.com/focustense/StardewPenPals/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/focustense/StardewPenPals/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/focustense/StardewPenPals/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/focustense/StardewPenPals/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/focustense/StardewPenPals/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/focustense/StardewPenPals/tree/v0.1.0
