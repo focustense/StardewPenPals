@@ -1,4 +1,6 @@
-﻿namespace PenPals.Data;
+﻿using Newtonsoft.Json;
+
+namespace PenPals.Data;
 
 /// <summary>
 /// Player-instanced data about sent gifts.
@@ -57,7 +59,7 @@ public class GiftMailData
 /// <param name="Reasons">Reasons for non-giftability at the time of send-back.</param>
 public record ReturnedGift(
     string NpcName,
-    SObject GiftObject,
+    [property: JsonConverter(typeof(XmlObjectConverter))] SObject GiftObject,
     WorldDate PickupDate,
     NonGiftableReasons Reasons
 )
