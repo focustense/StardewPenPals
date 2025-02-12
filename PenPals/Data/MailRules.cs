@@ -84,6 +84,15 @@ public class MailRules(ModConfig config, CustomRules customRules)
                 friendship.GiftsThisWeek >= 2
                 && (sameDayShipping || Game1.Date.DayOfWeek != DayOfWeek.Saturday)
                 && !WillReceiveOnBirthday(to)
+                && (
+                    !GameStateQuery.Exists(
+                        "Spiderbuttons.ButtonsExtraBooks_WEEKLY_GIFTS_LIMIT_REACHED"
+                    )
+                    || !GameStateQuery.CheckConditions(
+                        $"Spiderbuttons.ButtonsExtraBooks_WEEKLY_GIFTS_LIMIT_REACHED Current ${to.Name}",
+                        player: from
+                    )
+                )
             )
             {
                 reasons |= NonGiftableReasons.WeeklyLimit;
