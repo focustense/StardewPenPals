@@ -14,6 +14,11 @@ public partial class GiftMailFilters : INotifyPropertyChanged
     public Color BirthdayButtonTint => Birthdays ? Color.White : FilterInactiveColor;
 
     /// <summary>
+    /// Tint color for the under-max-friendship button, depending on whether the filter is active.
+    /// </summary>
+    public Color FriendshipButtonTint => UnderMaxFriendship ? Color.White : FilterInactiveColor;
+
+    /// <summary>
     /// Tint color for the quest filter button, depending on whether the filter is active.
     /// </summary>
     public Color QuestButtonTint => Quests ? Color.White : FilterInactiveColor;
@@ -54,6 +59,13 @@ public partial class GiftMailFilters : INotifyPropertyChanged
     private GiftTaste minTaste = GiftTaste.Neutral;
 
     /// <summary>
+    /// Whether to show only NPCs that are under the friendship limit, i.e. will gain friendship
+    /// from sending a gift.
+    /// </summary>
+    [Notify]
+    private bool underMaxFriendship;
+
+    /// <summary>
     /// Clears all filters.
     /// </summary>
     /// <returns>Always <c>true</c> to stop event bubbling.</returns>
@@ -64,6 +76,7 @@ public partial class GiftMailFilters : INotifyPropertyChanged
         Quests = false;
         MinTaste = GiftTaste.Neutral;
         SearchText = "";
+        UnderMaxFriendship = false;
         return true;
     }
 
@@ -75,6 +88,17 @@ public partial class GiftMailFilters : INotifyPropertyChanged
     {
         Game1.playSound("smallSelect");
         Birthdays = !Birthdays;
+        return true;
+    }
+
+    /// <summary>
+    /// Toggles the state of the <see cref="UnderMaxFriendship"/> filter.
+    /// </summary>
+    /// <returns>Always <c>true</c> to stop event bubbling.</returns>
+    public bool ToggleFriendship()
+    {
+        Game1.playSound("smallSelect");
+        UnderMaxFriendship = !UnderMaxFriendship;
         return true;
     }
 

@@ -7,6 +7,12 @@
     "BigRedX": {
       "SourceRect": "269, 471, 14, 15"
     },
+    "HeartEmpty": {
+      "SourceRect": "218, 428, 7, 6"
+    },
+    "HeartFull": {
+      "SourceRect": "211, 428, 7, 6"
+    },
     "MagnifyingGlass": {
       "SourceRect": "208, 320, 16, 16"
     },

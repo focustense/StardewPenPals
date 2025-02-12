@@ -1,4 +1,5 @@
-﻿using StardewValley.Characters;
+﻿using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Quests;
 
 namespace PenPals.Data;
@@ -71,10 +72,6 @@ public class MailRules(ModConfig config, CustomRules customRules)
         {
             reasons |= NonGiftableReasons.Unmet;
             return reasons;
-        }
-        if (friendship.Points >= GetMaxFriendship(friendship, to.datable.Value))
-        {
-            reasons |= NonGiftableReasons.MaxFriendship;
         }
         if (!customRules.IgnoreLimits.Contains(item.QualifiedItemId))
         {
@@ -150,6 +147,19 @@ public class MailRules(ModConfig config, CustomRules customRules)
     {
         int basePoints = quest.dailyQuest.Value ? 150 : 255;
         return (int)(basePoints * config.QuestFriendshipMultiplier);
+    }
+
+    /// <summary>
+    /// Checks if the recipient is already at max friendship with the specified gift-giver.
+    /// </summary>
+    /// <param name="from">The player sending the gift.</param>
+    /// <param name="to">The NPC who will receive the gift.</param>
+    /// <returns><c>true</c> if the <paramref name="from"/> player has the maximum allowed
+    /// friendship (hearts) with the <paramref name="to"/> NPC, otherwise <c>false</c>.</returns>
+    public bool HasMaxFriendship(Farmer from, NPC to)
+    {
+        return from.friendshipData.TryGetValue(to.Name, out var friendship)
+            && friendship.Points >= GetMaxFriendship(friendship, to.datable.Value);
     }
 
     /// <summary>

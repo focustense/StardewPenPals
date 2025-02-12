@@ -111,11 +111,13 @@ internal class GiftMailLauncher(
         var pendingQuest = supportedQuests
             .Select(quest => ItemQuestInfo.TryFromQuest(quest, who, npc))
             .FirstOrDefault(info => info is not null);
+        var hasMaxFriendship = rules.HasMaxFriendship(who, npc);
         return new RecipientViewModel(
             npc,
             item,
             taste,
             nonGiftableReasons,
+            hasMaxFriendship,
             pendingGift,
             pendingQuest,
             deliveryDate

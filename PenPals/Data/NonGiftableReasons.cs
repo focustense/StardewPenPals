@@ -73,11 +73,9 @@ public enum NonGiftableReasons
     WeeklyLimit = 64,
 
     /// <summary>
-    /// The player has already maxed friendship with this NPC. May be used as a "soft" restriction,
-    /// since this does not prevent gift-giving in the game, only makes it pointless from an
-    /// advancement perspective.
+    /// Unused flag; used to refer to max friendship, but this has been removed as a restriction.
     /// </summary>
-    MaxFriendship = 128,
+    Reserved = 128,
 
     /// <summary>
     /// The NPC would reject the gift if given in person.

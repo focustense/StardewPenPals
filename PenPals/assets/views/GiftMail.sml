@@ -91,6 +91,16 @@
                                tint={BirthdayButtonTint} />
                     </button>
                     <button margin="0, 0, 4, 0"
+                            tooltip={#GiftMailMenu.Filters.Friendship.Tooltip}
+                            left-click=|ToggleFriendship()|>
+                        <image layout="20px 36px"
+                               margin="2"
+                               horizontal-alignment="middle"
+                               vertical-alignment="middle"
+                               sprite={@Mods/focustense.PenPals/Sprites/Cursors:HeartEmpty}
+                               tint={FriendshipButtonTint} />
+                    </button>
+                    <button margin="0, 0, 4, 0"
                             tooltip={#GiftMailMenu.Filters.Reset.Tooltip}
                             left-click=|Clear()|>
                         <image layout="32px"
@@ -155,16 +165,23 @@
                        margin="2, 0, 2, 2">
                     <item star-layout="12px" />
                 </frame>
+                <image *if={:HasMaxFriendship}
+                       layout="32px"
+                       margin="2, 3, 2, 0"
+                       sprite={@Mods/focustense.PenPals/Sprites/Cursors:HeartFull}
+                       shadow-alpha="0.25"
+                       shadow-offset="-2, 2"
+                       tooltip={#GiftMailMenu.Tooltip.MaxFriendship} />
                 <image *if={:HasPendingQuest}
                        layout="32px"
-                       margin="2, 0, 2, 0"
+                       margin="2, 0"
                        sprite={@Mods/focustense.PenPals/Sprites/Cursors:QuestButton}
                        shadow-alpha="0.25"
                        shadow-offset="-2, 2"
                        tooltip={:PendingQuest} />
                 <image *if={:HasBirthday}
                        layout="32px"
-                       margin="2, 0, 2, 0"
+                       margin="2, 0"
                        sprite={@Mods/focustense.PenPals/Sprites/Cursors:Balloon}
                        shadow-alpha="0.25"
                        shadow-offset="-2, 2"

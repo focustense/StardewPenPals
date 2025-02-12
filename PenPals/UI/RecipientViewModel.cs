@@ -23,6 +23,7 @@ public class RecipientViewModel(
     Item item,
     GiftTaste? taste,
     NonGiftableReasons nonGiftableReasons,
+    bool hasMaxFriendship,
     GiftItemViewModel? pendingGift,
     ItemQuestInfo? pendingQuest,
     WorldDate deliveryDate
@@ -57,6 +58,11 @@ public class RecipientViewModel(
     public bool HasCompletableQuest { get; } =
         pendingQuest?.RequiredItemId == item.QualifiedItemId
         && pendingQuest.RequiredItemAmount <= item.Stack;
+
+    /// <summary>
+    /// Whether the recipient is at max friendship (hearts) with the sender.
+    /// </summary>
+    public bool HasMaxFriendship => hasMaxFriendship;
 
     /// <summary>
     /// Whether the recipient has a <see cref="PendingGift"/>.

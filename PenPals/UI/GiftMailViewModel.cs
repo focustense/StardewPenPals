@@ -94,11 +94,17 @@ public partial class GiftMailViewModel(
         // primary constructor. About the same amount of code as converting to regular ctor.
         WatchFilters();
         IEnumerable<RecipientViewModel> result = recipients;
-        if (Filters.Birthdays || Filters.Quests || Filters.MinTaste != GiftTaste.Neutral)
+        if (
+            Filters.Birthdays
+            || Filters.Quests
+            || Filters.UnderMaxFriendship
+            || Filters.MinTaste != GiftTaste.Neutral
+        )
         {
             result = result.Where(r =>
                 (Filters.Birthdays && r.HasBirthday)
                 || (Filters.Quests && r.HasPendingQuest)
+                || (Filters.UnderMaxFriendship && !r.HasMaxFriendship)
                 || (
                     Filters.MinTaste != GiftTaste.Neutral
                     && r.Reaction?.IsAtLeast(Filters.MinTaste) == true
