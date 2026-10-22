@@ -31,19 +31,21 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
     }
 
     /// <summary>
-    /// Make all NPCs receive their gifts immediately.
+    /// Make all NPCs receive gifts from the current screen's player immediately.
     /// </summary>
     public IReadOnlyList<GiftResult> ReceiveAll()
     {
         var results = new List<GiftResult>();
         bool hasReturns = false;
         bool hasCompletedQuests = false;
+        var farmer = Game1.player;
         foreach (var (playerId, giftData) in data.FarmerGiftMail)
         {
-            var farmer = Game1.GetPlayer(playerId);
-            if (farmer is null)
+            // SMAPI raises day events for each local screen. Quest completion and parts of
+            // friendship handling use Game1.player internally, even when given a Farmer.
+            // Leave other players' parcels queued for their own screen's event.
+            if (playerId != farmer.UniqueMultiplayerID)
             {
-                monitor.Log($"Farmer ID {playerId} not found; skipping gifts.", LogLevel.Error);
                 continue;
             }
             foreach (var (npcName, parcel) in giftData.OutgoingGifts)
@@ -87,6 +89,7 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                 if (GetDeliveryQuest(farmer, parcel.QuestId) is { } quest)
                 {
                     var questPoints = Context.Rules.GetQuestPoints(quest);
+                    var previousFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
                     farmer.changeFriendship(questPoints, npc);
                     GamePatches.SuppressQuestSounds = true;
                     try
@@ -98,7 +101,17 @@ public class GiftDistributor(RulesContext context, IGameContentHelper contentHel
                         GamePatches.SuppressQuestSounds = false;
                     }
                     hasCompletedQuests = true;
-                    results.Add(new(farmer, npc, parcel.Gift, quest, "Quest", questPoints));
+                    var nextFriendship = farmer.tryGetFriendshipLevelForNPC(npc.Name) ?? 0;
+                    results.Add(
+                        new(
+                            farmer,
+                            npc,
+                            parcel.Gift,
+                            quest,
+                            "Quest",
+                            nextFriendship - previousFriendship
+                        )
+                    );
                 }
                 else
                 {

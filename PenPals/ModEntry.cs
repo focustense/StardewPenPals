@@ -142,11 +142,21 @@ internal sealed class ModEntry : Mod
 
     private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        // ModEntry and data are shared by all local screens. A farmhand joining must not
+        // reload yesterday's data over parcels already queued by another local player.
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         data = Helper.Data.ReadSaveData<ModData>(ModManifest.UniqueID) ?? new();
     }
 
     private void GameLoop_Saving(object? sender, SavingEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         Helper.Data.WriteSaveData(ModManifest.UniqueID, data);
     }
 

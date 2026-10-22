@@ -12,7 +12,7 @@ internal class ReceiveAllCommand(Func<GiftDistributor> distributorFactory)
     public string Name => "receiveall";
 
     public string Description =>
-        "Make all NPCs receive their gifts immediately, ignoring mail schedules.";
+        "Make all NPCs receive gifts from the current screen's player immediately, ignoring mail schedules.";
 
     public void Execute(ReceiveAllArgs args)
     {
